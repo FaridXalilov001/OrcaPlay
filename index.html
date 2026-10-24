@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OrcaPlay - Aviator</title>
+    <title>Aviator</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,900&display=swap');
+
         * {
             box-sizing: border-box;
             user-select: none;
@@ -18,130 +18,120 @@
         }
 
         body {
-            background-color: #0e0e0e;
+            background-color: #000000;
             color: #ffffff;
-            overflow-x: hidden;
-            touch-action: manipulation;
-        }
-
-        /* Aviator Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #141414;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2c2c2c;
-            border-radius: 2px;
-        }
-
-        .multiplier-history {
+            overflow: hidden;
+            height: 100vh;
             display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
+            flex-direction: column;
         }
-        .multiplier-history::-webkit-scrollbar {
-            display: none;
+
+        /* Spribe Aviator Custom Colors & Styles */
+        .spribe-bg { background-color: #0d0d0d; }
+        .panel-bg { background-color: #1b1c1d; }
+        .inner-bg { background-color: #141516; }
+
+        .aviator-logo {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            color: #e50914;
+            letter-spacing: -0.5px;
         }
 
         .pill-blue { background: #122538; color: #34b4ff; border: 1px solid #1a3c5e; }
         .pill-purple { background: #281238; color: #c038ff; border: 1px solid #4a186b; }
         .pill-magenta { background: #381228; color: #ff388c; border: 1px solid #6b1842; }
 
-        .btn-bet-green {
-            background: linear-gradient(180deg, #28a745 0%, #1e7e34 100%);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
-        }
-        .btn-bet-green:active {
-            transform: scale(0.98);
-        }
-
-        .btn-cashout-orange {
-            background: linear-gradient(180deg, #ff9900 0%, #d37b00 100%);
-            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.4);
+        .fun-mode-banner {
+            background: #d97706;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
-        .btn-cancel-red {
-            background: linear-gradient(180deg, #dc3545 0%, #bd2130 100%);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        .btn-green-spribe {
+            background: #28a745;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            border-radius: 12px;
+        }
+        .btn-green-spribe:active {
+            transform: scale(0.97);
+            background: #218838;
         }
 
-        .bg-panel {
-            background-color: #1b1c1d;
-            border: 1px solid #282a2d;
+        .btn-orange-spribe {
+            background: #d37b00;
+            box-shadow: 0 4px 10px rgba(211, 123, 0, 0.3);
+            border-radius: 12px;
         }
 
-        .bg-inner-panel {
-            background-color: #141516;
+        .tab-btn {
+            background: #18191a;
+            color: #888888;
+            border-radius: 20px;
         }
-
-        .tab-active {
-            background-color: #2c2d30;
+        .tab-btn.active {
+            background: #2c2d30;
             color: #ffffff;
         }
 
-        /* Pulse Animations */
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.3; }
+        /* Sunburst Background Effect for Screen */
+        .sunburst {
+            background: repeating-conic-gradient(
+                from 0deg,
+                #1a0510 0deg 15deg,
+                #0f0209 15deg 30deg
+            );
         }
-        .animate-pulse-glow {
-            animation: pulse-glow 1.5s infinite;
-        }
+
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="flex flex-col h-screen max-w-md mx-auto relative select-none">
+<body class="max-w-md mx-auto relative flex flex-col h-full w-full">
 
-    <!-- Top Navigation / Header -->
-    <header class="bg-black text-white px-3 py-2 flex items-center justify-between border-b border-gray-800 z-20">
-        <div class="flex items-center gap-2">
-            <span class="text-red-600 font-black italic text-2xl tracking-wider flex items-center gap-1">
-                <i class="fa-solid font-bold italic">Aviator</i>
-            </span>
-            <span id="demo-tag" class="bg-amber-600 text-black text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">FUN MODE</span>
+    <!-- Top Spribe Header -->
+    <header class="bg-black px-3 py-2 flex items-center justify-between border-b border-zinc-900 z-20 flex-shrink-0">
+        <div class="flex items-center gap-1">
+            <span class="aviator-logo text-2xl tracking-tight">Aviator</span>
         </div>
         
         <div class="flex items-center gap-3">
-            <div class="flex items-center bg-zinc-900 border border-zinc-700 rounded-full px-3 py-1 gap-1.5">
-                <span id="balance-val" class="text-green-400 font-bold text-sm">3,000.00</span>
-                <span class="text-xs text-gray-400 font-semibold">USD</span>
+            <div class="flex items-center text-green-500 font-bold text-base gap-1">
+                <span id="balance-val">3,000.00</span>
+                <span class="text-xs text-gray-400">USD</span>
             </div>
-            <button id="menu-btn" onclick="toggleMenu()" class="text-gray-400 hover:text-white text-lg">
+            <button onclick="toggleMenu()" class="text-gray-400 hover:text-white text-xl">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
     </header>
 
-    <!-- Side Dropdown Menu -->
-    <div id="side-menu" class="hidden absolute top-12 right-2 w-56 bg-zinc-900 border border-zinc-700 rounded-lg shadow-2xl z-50 p-3 text-sm">
-        <div class="flex items-center gap-3 pb-3 border-b border-zinc-800">
-            <div id="user-avatar" class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold text-lg">U</div>
+    <!-- Side Menu Dropdown -->
+    <div id="side-menu" class="hidden absolute top-12 right-2 w-52 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl z-50 p-3 text-xs">
+        <div class="flex items-center gap-2 pb-2 border-b border-zinc-800">
+            <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center font-bold text-white">U</div>
             <div>
                 <div id="user-name" class="font-bold text-white">Oyunçu</div>
-                <div id="user-id" class="text-xs text-gray-400">ID: 849201</div>
+                <div id="user-id" class="text-[10px] text-gray-500">ID: 948201</div>
             </div>
         </div>
         <div class="py-2 flex flex-col gap-1">
             <button onclick="openDepositModal()" class="flex items-center justify-between w-full p-2 rounded hover:bg-zinc-800 text-green-400 font-bold">
-                <span><i class="fa-solid fa-wallet mr-2"></i> Depozit Et</span>
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-            </button>
-            <button onclick="openWithdrawModal()" class="flex items-center justify-between w-full p-2 rounded hover:bg-zinc-800 text-gray-300">
-                <span><i class="fa-solid fa-money-bill-transfer mr-2"></i> Çıxarış</span>
-                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <span><i class="fa-solid fa-wallet mr-2"></i> Depozit</span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
             </button>
             <button onclick="toggleSound()" class="flex items-center justify-between w-full p-2 rounded hover:bg-zinc-800 text-gray-300">
                 <span><i id="sound-icon" class="fa-solid fa-volume-high mr-2"></i> Səs Effektləri</span>
-                <span id="sound-status" class="text-xs text-green-400">AÇIQ</span>
+                <span id="sound-status" class="text-green-400 font-bold">AÇIQ</span>
             </button>
         </div>
     </div>
 
-    <!-- Multiplier History Bar -->
-    <div class="bg-black/90 px-2 py-1.5 flex items-center gap-1.5 border-b border-zinc-800 z-10 overflow-x-auto">
-        <div id="history-list" class="multiplier-history flex items-center gap-1.5 text-xs font-bold w-full">
+    <!-- Multipliers History Bar -->
+    <div class="bg-black/90 px-2 py-1 flex items-center gap-1 border-b border-zinc-900 overflow-x-auto flex-shrink-0">
+        <div id="history-list" class="flex items-center gap-1.5 text-[11px] font-bold w-full overflow-x-auto">
             <span class="pill-blue px-2 py-0.5 rounded-full">1.20x</span>
             <span class="pill-blue px-2 py-0.5 rounded-full">1.15x</span>
             <span class="pill-purple px-2 py-0.5 rounded-full">1.96x</span>
@@ -151,143 +141,132 @@
             <span class="pill-magenta px-2 py-0.5 rounded-full">4.74x</span>
             <span class="pill-magenta px-2 py-0.5 rounded-full">11.59x</span>
         </div>
-        <button class="text-zinc-500 hover:text-white px-1 text-xs">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-        </button>
+        <button class="text-gray-500 px-1 text-xs"><i class="fa-solid fa-ellipsis-vertical"></i></button>
     </div>
 
-    <!-- Main Game Canvas Area -->
-    <div class="relative w-full h-56 bg-black flex-shrink-0 overflow-hidden border-b-2 border-zinc-800">
-        <canvas id="aviatorCanvas" class="w-full h-full block"></canvas>
-        
-        <!-- Live Status Overlay -->
-        <div id="status-overlay" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <div id="waiting-text" class="text-amber-400 font-extrabold text-xl tracking-wider uppercase flex items-center gap-2">
-                <i class="fa-solid fa-spinner animate-spin"></i> NÖVBƏTİ RAUND GÖZLƏNİLİR...
-            </div>
-            <div id="multiplier-display" class="hidden text-white font-black text-6xl tracking-tight drop-shadow-lg">
+    <!-- Main Game Screen -->
+    <div class="relative w-full h-48 bg-black flex-shrink-0 overflow-hidden border-b border-zinc-800">
+        <!-- FUN MODE Banner -->
+        <div class="fun-mode-banner text-center py-0.5 uppercase tracking-wide">
+            FUN MODE
+        </div>
+
+        <!-- Canvas Visuals -->
+        <div class="relative w-full h-full sunburst flex items-center justify-center">
+            <canvas id="aviatorCanvas" class="absolute inset-0 w-full h-full"></canvas>
+
+            <!-- Multiplier Counter Display -->
+            <div id="multiplier-display" class="relative z-10 text-white font-black text-6xl tracking-tight drop-shadow-2xl">
                 1.00x
             </div>
-            <div id="crashed-display" class="hidden text-center">
-                <div class="text-red-600 font-black text-4xl uppercase tracking-widest drop-shadow">UÇDU GETDİ!</div>
-                <div id="crashed-at-val" class="text-gray-400 font-bold text-lg mt-1">1.00x -də</div>
-            </div>
-        </div>
 
-        <!-- Live Online Players Count Badge -->
-        <div class="absolute bottom-2 right-2 bg-zinc-900/80 backdrop-blur border border-zinc-700/50 rounded-full px-2.5 py-1 flex items-center gap-1.5 text-[11px] text-gray-300">
-            <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <span id="live-online-count" class="font-bold text-white">432</span>
+            <div id="waiting-text" class="hidden relative z-10 text-amber-500 font-bold text-lg uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-spinner animate-spin"></i> NÖVBƏTİ RAUND GÖZLƏNİLİR...
+            </div>
+
+            <div id="crashed-display" class="hidden relative z-10 text-center">
+                <div class="text-red-600 font-black text-4xl uppercase tracking-widest">UÇDU GETDİ!</div>
+                <div id="crashed-at-val" class="text-gray-400 font-bold text-sm mt-1">1.00x</div>
+            </div>
+
+            <!-- Avatars Badge Bottom Right -->
+            <div class="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur px-2 py-0.5 rounded-full text-xs text-gray-300 border border-zinc-800">
+                <div class="flex -space-x-1.5 overflow-hidden">
+                    <img class="inline-block h-4 w-4 rounded-full ring-1 ring-zinc-800" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="">
+                    <img class="inline-block h-4 w-4 rounded-full ring-1 ring-zinc-800" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="">
+                </div>
+                <span id="live-online-count" class="font-bold text-[11px] ml-1">205</span>
+            </div>
         </div>
     </div>
 
-    <!-- Dual Betting Control Panels Container -->
-    <div class="flex-1 bg-zinc-950 p-2 overflow-y-auto space-y-2">
+    <!-- Dual Betting Control Panels -->
+    <div class="flex-1 bg-black p-2 space-y-2 overflow-y-auto">
         
         <!-- PANEL 1 -->
-        <div class="bg-panel rounded-xl p-2.5 border border-zinc-800 shadow-md">
-            <!-- Mode Switcher Tabs -->
-            <div class="flex bg-inner-panel p-0.5 rounded-lg mb-2 text-xs font-bold">
-                <button id="p1-tab-bet" onclick="switchBetTab(1, 'bet')" class="flex-1 py-1 rounded-md text-center tab-active">Bet</button>
-                <button id="p1-tab-auto" onclick="switchBetTab(1, 'auto')" class="flex-1 py-1 rounded-md text-center text-gray-400">Auto</button>
+        <div class="panel-bg rounded-2xl p-2.5 border border-zinc-800/80">
+            <!-- Bet / Auto Mode Switcher -->
+            <div class="flex justify-center mb-2">
+                <div class="flex bg-inner-bg p-0.5 rounded-full w-44 text-xs font-bold border border-zinc-800">
+                    <button id="p1-tab-bet" onclick="switchBetTab(1, 'bet')" class="flex-1 py-1 tab-btn active">Bet</button>
+                    <button id="p1-tab-auto" onclick="switchBetTab(1, 'auto')" class="flex-1 py-1 tab-btn">Auto</button>
+                </div>
             </div>
 
             <div class="flex gap-2 items-center">
-                <!-- Amount Selector -->
-                <div class="flex-1 flex flex-col justify-between h-20 bg-inner-panel rounded-lg p-1.5 border border-zinc-800">
-                    <div class="flex items-center justify-between bg-zinc-900 rounded border border-zinc-700/60 px-2 py-1">
-                        <button onclick="adjustBet(1, -1)" class="text-gray-400 hover:text-white font-black text-base px-1.5">-</button>
+                <!-- Amount Box -->
+                <div class="flex-1 flex flex-col justify-between h-20 bg-inner-bg rounded-xl p-1.5 border border-zinc-800">
+                    <div class="flex items-center justify-between bg-zinc-900 rounded-lg px-2 py-1">
+                        <button onclick="adjustBet(1, -1)" class="w-6 h-6 rounded-full bg-zinc-800 text-gray-300 font-bold flex items-center justify-center text-sm">-</button>
                         <span id="p1-amount" class="font-black text-white text-base">1.00</span>
-                        <button onclick="adjustBet(1, 1)" class="text-gray-400 hover:text-white font-black text-base px-1.5">+</button>
+                        <button onclick="adjustBet(1, 1)" class="w-6 h-6 rounded-full bg-zinc-800 text-gray-300 font-bold flex items-center justify-center text-sm">+</button>
                     </div>
-                    <!-- Quick Select Preset Grid -->
                     <div class="grid grid-cols-4 gap-1 mt-1">
-                        <button onclick="setBet(1, 1)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">1</button>
-                        <button onclick="setBet(1, 2)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">2</button>
-                        <button onclick="setBet(1, 5)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">5</button>
-                        <button onclick="setBet(1, 10)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">10</button>
+                        <button onclick="setBet(1, 1)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">1</button>
+                        <button onclick="setBet(1, 2)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">2</button>
+                        <button onclick="setBet(1, 5)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">5</button>
+                        <button onclick="setBet(1, 10)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">10</button>
                     </div>
                 </div>
 
-                <!-- Action Button -->
-                <button id="p1-btn" onclick="handleBetClick(1)" class="w-36 h-20 btn-bet-green rounded-xl flex flex-col items-center justify-center text-white transition-all">
-                    <span id="p1-btn-label" class="text-sm font-bold uppercase tracking-wider">BET</span>
-                    <span id="p1-btn-val" class="text-lg font-black mt-0.5">1.00 USD</span>
+                <!-- Green Bet Button -->
+                <button id="p1-btn" onclick="handleBetClick(1)" class="w-36 h-20 btn-green-spribe flex flex-col items-center justify-center text-white">
+                    <span id="p1-btn-label" class="text-base font-extrabold uppercase">Bet</span>
+                    <span id="p1-btn-val" class="text-lg font-black">1.00 USD</span>
                 </button>
-            </div>
-            
-            <!-- Auto Cashout Sub-setting -->
-            <div id="p1-auto-opts" class="hidden mt-2 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-xs text-gray-400">
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" id="p1-auto-enable" class="rounded bg-zinc-800 border-zinc-700 text-green-500 focus:ring-0">
-                    <span>Avto Çıxarış:</span>
-                </label>
-                <div class="flex items-center gap-1 bg-zinc-900 border border-zinc-700 rounded px-2 py-0.5">
-                    <input type="number" id="p1-auto-target" value="2.00" step="0.1" class="w-12 bg-transparent text-right font-bold text-white focus:outline-none">
-                    <span class="text-gray-500 font-bold">x</span>
-                </div>
             </div>
         </div>
 
         <!-- PANEL 2 -->
-        <div class="bg-panel rounded-xl p-2.5 border border-zinc-800 shadow-md">
-            <!-- Mode Switcher Tabs -->
-            <div class="flex bg-inner-panel p-0.5 rounded-lg mb-2 text-xs font-bold">
-                <button id="p2-tab-bet" onclick="switchBetTab(2, 'bet')" class="flex-1 py-1 rounded-md text-center tab-active">Bet</button>
-                <button id="p2-tab-auto" onclick="switchBetTab(2, 'auto')" class="flex-1 py-1 rounded-md text-center text-gray-400">Auto</button>
+        <div class="panel-bg rounded-2xl p-2.5 border border-zinc-800/80">
+            <div class="flex justify-center mb-2">
+                <div class="flex bg-inner-bg p-0.5 rounded-full w-44 text-xs font-bold border border-zinc-800">
+                    <button id="p2-tab-bet" onclick="switchBetTab(2, 'bet')" class="flex-1 py-1 tab-btn active">Bet</button>
+                    <button id="p2-tab-auto" onclick="switchBetTab(2, 'auto')" class="flex-1 py-1 tab-btn">Auto</button>
+                </div>
             </div>
 
             <div class="flex gap-2 items-center">
-                <!-- Amount Selector -->
-                <div class="flex-1 flex flex-col justify-between h-20 bg-inner-panel rounded-lg p-1.5 border border-zinc-800">
-                    <div class="flex items-center justify-between bg-zinc-900 rounded border border-zinc-700/60 px-2 py-1">
-                        <button onclick="adjustBet(2, -1)" class="text-gray-400 hover:text-white font-black text-base px-1.5">-</button>
+                <div class="flex-1 flex flex-col justify-between h-20 bg-inner-bg rounded-xl p-1.5 border border-zinc-800">
+                    <div class="flex items-center justify-between bg-zinc-900 rounded-lg px-2 py-1">
+                        <button onclick="adjustBet(2, -1)" class="w-6 h-6 rounded-full bg-zinc-800 text-gray-300 font-bold flex items-center justify-center text-sm">-</button>
                         <span id="p2-amount" class="font-black text-white text-base">1.00</span>
-                        <button onclick="adjustBet(2, 1)" class="text-gray-400 hover:text-white font-black text-base px-1.5">+</button>
+                        <button onclick="adjustBet(2, 1)" class="w-6 h-6 rounded-full bg-zinc-800 text-gray-300 font-bold flex items-center justify-center text-sm">+</button>
                     </div>
-                    <!-- Quick Select Preset Grid -->
                     <div class="grid grid-cols-4 gap-1 mt-1">
-                        <button onclick="setBet(2, 1)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">1</button>
-                        <button onclick="setBet(2, 2)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">2</button>
-                        <button onclick="setBet(2, 5)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">5</button>
-                        <button onclick="setBet(2, 10)" class="bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-1 rounded border border-zinc-700/40">10</button>
+                        <button onclick="setBet(2, 1)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">1</button>
+                        <button onclick="setBet(2, 2)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">2</button>
+                        <button onclick="setBet(2, 5)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">5</button>
+                        <button onclick="setBet(2, 10)" class="bg-zinc-800/80 hover:bg-zinc-700 text-gray-300 font-bold text-[11px] py-0.5 rounded-md">10</button>
                     </div>
                 </div>
 
-                <!-- Action Button -->
-                <button id="p2-btn" onclick="handleBetClick(2)" class="w-36 h-20 btn-bet-green rounded-xl flex flex-col items-center justify-center text-white transition-all">
-                    <span id="p2-btn-label" class="text-sm font-bold uppercase tracking-wider">BET</span>
-                    <span id="p2-btn-val" class="text-lg font-black mt-0.5">1.00 USD</span>
+                <button id="p2-btn" onclick="handleBetClick(2)" class="w-36 h-20 btn-green-spribe flex flex-col items-center justify-center text-white">
+                    <span id="p2-btn-label" class="text-base font-extrabold uppercase">Bet</span>
+                    <span id="p2-btn-val" class="text-lg font-black">1.00 USD</span>
                 </button>
-            </div>
-
-            <!-- Auto Cashout Sub-setting -->
-            <div id="p2-auto-opts" class="hidden mt-2 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-xs text-gray-400">
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" id="p2-auto-enable" class="rounded bg-zinc-800 border-zinc-700 text-green-500 focus:ring-0">
-                    <span>Avto Çıxarış:</span>
-                </label>
-                <div class="flex items-center gap-1 bg-zinc-900 border border-zinc-700 rounded px-2 py-0.5">
-                    <input type="number" id="p2-auto-target" value="2.00" step="0.1" class="w-12 bg-transparent text-right font-bold text-white focus:outline-none">
-                    <span class="text-gray-500 font-bold">x</span>
-                </div>
             </div>
         </div>
 
-        <!-- Live Bets Feed & Stats -->
-        <div class="bg-panel rounded-xl p-2.5 border border-zinc-800">
-            <div class="flex items-center justify-between border-b border-zinc-800 pb-2 text-xs font-bold text-gray-400">
-                <span class="text-white font-extrabold flex items-center gap-1.5">
-                    <i class="fa-solid fa-users text-red-500"></i> Bütün Mərc Etənlər
-                </span>
-                <span id="live-total-win" class="text-green-400 font-bold">2,365.98 USD</span>
+        <!-- Live Bets Bottom Table -->
+        <div class="panel-bg rounded-2xl p-2.5 border border-zinc-800">
+            <div class="flex items-center justify-center gap-6 border-b border-zinc-800 pb-2 text-xs font-bold text-gray-400">
+                <button class="text-white border-b-2 border-red-600 pb-1">All Bets</button>
+                <button class="hover:text-white">Previous</button>
+                <button class="hover:text-white">Top</button>
             </div>
-            
-            <div id="live-bets-feed" class="mt-2 space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
-                <!-- Dynamic Player Rows Generated by JS -->
+
+            <div class="flex items-center justify-between pt-2 text-[11px] text-gray-400 font-bold">
+                <div class="flex items-center gap-1">
+                    <span class="text-gray-300">299/430 Bets</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-white font-extrabold text-xs">2,365.98</span> <span class="text-gray-400">Total win USD</span>
+                </div>
+            </div>
+
+            <div class="w-full bg-zinc-800 h-1 rounded-full mt-1.5 overflow-hidden">
+                <div class="bg-green-500 h-full w-2/3"></div>
             </div>
         </div>
 
@@ -295,150 +274,85 @@
 
     <!-- Deposit Modal -->
     <div id="deposit-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-xs p-5 relative shadow-2xl">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-xs p-5 relative">
             <button onclick="closeDepositModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <h3 class="text-lg font-black text-white flex items-center gap-2 mb-4">
-                <i class="fa-solid fa-wallet text-green-400"></i> Depozit Hesabı
-            </h3>
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="text-xs text-gray-400 font-bold block mb-1">Məbləğ (USD):</label>
-                    <input type="number" id="dep-amount" value="50" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-2.5 text-white font-bold text-lg focus:outline-none focus:border-green-500">
-                </div>
-                <div>
-                    <label class="text-xs text-gray-400 font-bold block mb-1">Ödəniş Üsulu:</label>
-                    <select class="w-full bg-zinc-800 border border-zinc-700 rounded-lg p-2.5 text-white text-sm font-bold focus:outline-none">
-                        <option>CryptoBot (USDT / TON)</option>
-                        <option>Bank Kartı (AZN / USD)</option>
-                    </select>
-                </div>
-                <button onclick="confirmDeposit()" class="w-full btn-bet-green py-3 rounded-xl font-black text-white text-base mt-2">
-                    Balansı Artır
-                </button>
-            </div>
+            <h3 class="text-base font-extrabold text-white mb-3">Balansı Artır</h3>
+            <input type="number" id="dep-amount" value="50" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-white font-bold text-base mb-3 focus:outline-none">
+            <button onclick="confirmDeposit()" class="w-full btn-green-spribe py-3 font-bold text-white text-sm">Depozit Et</button>
         </div>
     </div>
 
     <script>
-        // Telegram WebApp Initialization
         const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if(tg) {
-            tg.expand();
-            tg.enableClosingConfirmation();
-        }
+        if(tg) { tg.expand(); }
 
-        // Web Audio Synthesizer (Realistic Sound FX)
+        // Audio Effects Engine
         class AviatorAudio {
             constructor() {
                 this.ctx = null;
                 this.enabled = true;
-                this.engineOsc = null;
-                this.engineGain = null;
+                this.osc = null;
             }
-
-            init() {
-                if(!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-            }
-
+            init() { if(!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
             playTakeoff() {
                 if(!this.enabled) return;
                 this.init();
-                
                 try {
-                    this.engineOsc = this.ctx.createOscillator();
-                    this.engineGain = this.ctx.createGain();
-
-                    this.engineOsc.type = 'sawtooth';
-                    this.engineOsc.frequency.setValueAtTime(80, this.ctx.currentTime);
-
-                    this.engineGain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-
-                    this.engineOsc.connect(this.engineGain);
-                    this.engineGain.connect(this.ctx.destination);
-
-                    this.engineOsc.start();
+                    this.osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    this.osc.type = 'sawtooth';
+                    this.osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+                    this.osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    this.osc.start();
                 } catch(e){}
             }
-
-            updatePitch(multiplier) {
-                if(this.engineOsc && this.ctx) {
-                    const freq = Math.min(800, 80 + (multiplier * 60));
-                    this.engineOsc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            updatePitch(m) {
+                if(this.osc && this.ctx) {
+                    this.osc.frequency.setValueAtTime(Math.min(700, 100 + (m * 50)), this.ctx.currentTime);
                 }
             }
-
             playWin() {
                 if(!this.enabled) return;
                 this.init();
                 try {
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.3);
-                    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.3);
+                    const o = this.ctx.createOscillator();
+                    const g = this.ctx.createGain();
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(600, this.ctx.currentTime);
+                    o.frequency.exponentialRampToValueAtTime(1000, this.ctx.currentTime + 0.2);
+                    g.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                    o.connect(g); g.connect(this.ctx.destination);
+                    o.start(); o.stop(this.ctx.currentTime + 0.2);
                 } catch(e){}
             }
-
-            playCrash() {
-                if(!this.enabled) return;
-                this.stopEngine();
-                this.init();
-                try {
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.4);
-                } catch(e){}
-            }
-
             stopEngine() {
-                if(this.engineOsc) {
-                    try {
-                        this.engineOsc.stop();
-                        this.engineOsc.disconnect();
-                    } catch(e){}
-                    this.engineOsc = null;
+                if(this.osc) {
+                    try { this.osc.stop(); this.osc.disconnect(); } catch(e){}
+                    this.osc = null;
                 }
             }
         }
 
         const audio = new AviatorAudio();
 
-        // App State Variables
         let balance = 3000.00;
-        let gameState = 'waiting'; // 'waiting', 'flying', 'crashed'
+        let gameState = 'flying';
         let currentMultiplier = 1.00;
-        let crashPoint = 1.00;
-        let flyStartTime = 0;
-        
-        // Panels Betting State
+        let crashPoint = 2.64;
+        let flyStartTime = Date.now();
+
         const panels = {
-            1: { amount: 1.00, state: 'idle', betPlaced: false, cashedOut: false, winAmount: 0 },
-            2: { amount: 1.00, state: 'idle', betPlaced: false, cashedOut: false, winAmount: 0 }
+            1: { amount: 1.00, state: 'idle', winAmount: 0 },
+            2: { amount: 1.00, state: 'idle', winAmount: 0 }
         };
 
-        // Canvas Engine
         const canvas = document.getElementById('aviatorCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
@@ -446,126 +360,46 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Sync Telegram User Info
-        if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const u = tg.initDataUnsafe.user;
-            document.getElementById('user-name').innerText = u.first_name || 'Oyunçu';
-            document.getElementById('user-id').innerText = 'ID: ' + (u.id || '849201');
-            document.getElementById('user-avatar').innerText = (u.first_name || 'U').charAt(0).toUpperCase();
-        }
-
-        // Dummy Players Feed Data Generator
-        const fakeNames = ['Alex', 'Elvin', 'Rauf', 'CryptoKing', 'Samir', 'Vusal', 'Anna', 'Dmitry', 'Sarkhan', 'Leyla'];
-        function generateLiveBets() {
-            const container = document.getElementById('live-bets-feed');
-            container.innerHTML = '';
-            for(let i=0; i<8; i++) {
-                const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
-                const amt = (Math.random() * 20 + 1).toFixed(2);
-                const hasWon = Math.random() > 0.4;
-                const mult = (Math.random() * 3 + 1.1).toFixed(2);
-                
-                const row = document.createElement('div');
-                row.className = 'flex items-center justify-between py-1 border-b border-zinc-900/60 text-[11px]';
-                row.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="w-5 h-5 rounded-full bg-zinc-800 text-gray-300 flex items-center justify-center font-bold text-[9px]">${name.charAt(0)}</span>
-                        <span class="text-gray-300 font-bold">${name}</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-gray-400 font-semibold">${amt} USD</span>
-                        ${hasWon ? `<span class="pill-purple px-1.5 py-0.2 rounded font-extrabold text-[10px]">${mult}x</span>` : '<span class="text-zinc-600 font-bold">-</span>'}
-                    </div>
-                `;
-                container.appendChild(row);
-            }
-        }
-        generateLiveBets();
-
-        // Game Loop & Canvas Rendering
         function drawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw Grid Lines
-            ctx.strokeStyle = '#1a1b1e';
-            ctx.lineWidth = 1;
-            const gridSize = 40;
-            for(let x = 0; x < canvas.width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            for(let y = 0; y < canvas.height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
 
             if(gameState === 'flying' || gameState === 'crashed') {
-                const startX = 30;
-                const startY = canvas.height - 30;
+                const startX = 20;
+                const startY = canvas.height - 20;
                 
-                let progress = Math.min(1, (currentMultiplier - 1) / Math.max(2, crashPoint - 1));
-                if(gameState === 'crashed') progress = 1;
+                const progress = Math.min(1, (currentMultiplier - 1) / Math.max(1.5, crashPoint - 1));
+                const endX = startX + (canvas.width - 60) * progress;
+                const endY = startY - (canvas.height - 50) * progress;
 
-                const endX = startX + (canvas.width - 90) * Math.min(1, progress);
-                const endY = startY - (canvas.height - 80) * Math.min(1, progress);
-
-                // Curved Flight Line Background Gradient
+                // Curved Flight Area Fill
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
-                ctx.quadraticCurveTo(startX + (endX - startX) * 0.5, startY, endX, endY);
+                ctx.quadraticCurveTo(startX + (endX - startX) * 0.4, startY, endX, endY);
                 ctx.lineTo(endX, startY);
                 ctx.closePath();
                 
-                const fillGrad = ctx.createLinearGradient(0, endY, 0, startY);
-                if(gameState === 'crashed') {
-                    fillGrad.addColorStop(0, 'rgba(220, 53, 69, 0.3)');
-                    fillGrad.addColorStop(1, 'rgba(220, 53, 69, 0.0)');
-                } else {
-                    fillGrad.addColorStop(0, 'rgba(220, 20, 60, 0.4)');
-                    fillGrad.addColorStop(1, 'rgba(220, 20, 60, 0.0)');
-                }
-                ctx.fillStyle = fillGrad;
+                const grad = ctx.createLinearGradient(0, endY, 0, startY);
+                grad.addColorStop(0, 'rgba(229, 9, 20, 0.5)');
+                grad.addColorStop(1, 'rgba(229, 9, 20, 0.0)');
+                ctx.fillStyle = grad;
                 ctx.fill();
 
-                // Main Flight Curve Line
+                // Curved Line
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
-                ctx.quadraticCurveTo(startX + (endX - startX) * 0.5, startY, endX, endY);
-                ctx.strokeStyle = gameState === 'crashed' ? '#dc3545' : '#e01e37';
-                ctx.lineWidth = 4;
+                ctx.quadraticCurveTo(startX + (endX - startX) * 0.4, startY, endX, endY);
+                ctx.strokeStyle = '#e50914';
+                ctx.lineWidth = 3.5;
                 ctx.stroke();
 
-                // Red Airplane SVG Graphic
+                // Red Airplane
                 if(gameState === 'flying') {
                     ctx.save();
                     ctx.translate(endX, endY);
-                    
-                    // Draw Airplane Body
-                    ctx.fillStyle = '#ff1e43';
+                    ctx.fillStyle = '#e50914';
                     ctx.beginPath();
-                    ctx.ellipse(0, 0, 16, 7, -Math.PI/12, 0, Math.PI * 2);
+                    ctx.ellipse(0, 0, 14, 6, -Math.PI/12, 0, Math.PI * 2);
                     ctx.fill();
-
-                    // Wings
-                    ctx.fillStyle = '#b3001b';
-                    ctx.beginPath();
-                    ctx.moveTo(-2, -2);
-                    ctx.lineTo(4, -12);
-                    ctx.lineTo(8, -2);
-                    ctx.closePath();
-                    ctx.fill();
-
-                    // Propeller Blur
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(16, 0, 8, 0, Math.PI * 2);
-                    ctx.stroke();
-
                     ctx.restore();
                 }
             }
@@ -574,44 +408,13 @@
         }
         drawCanvas();
 
-        // Game State Controller
-        function startWaitingPeriod() {
-            gameState = 'waiting';
-            currentMultiplier = 1.00;
-            audio.stopEngine();
-
-            document.getElementById('waiting-text').classList.remove('hidden');
-            document.getElementById('multiplier-display').classList.add('hidden');
-            document.getElementById('crashed-display').classList.add('hidden');
-
-            // Reset Panel States if scheduled for next round
-            [1, 2].forEach(id => {
-                const p = panels[id];
-                if(p.state === 'queued') {
-                    p.state = 'active';
-                    p.betPlaced = true;
-                    p.cashedOut = false;
-                    updatePanelUI(id);
-                }
-            });
-
-            setTimeout(() => {
-                startFlightRound();
-            }, 4000);
-        }
-
         function startFlightRound() {
             gameState = 'flying';
             flyStartTime = Date.now();
-            
-            // Random Crash Point Generation
-            const rand = Math.random();
-            if(rand < 0.05) crashPoint = 1.00; // Instant crash
-            else if(rand < 0.60) crashPoint = 1.05 + Math.random() * 1.8;
-            else if(rand < 0.90) crashPoint = 2.0 + Math.random() * 4.0;
-            else crashPoint = 6.0 + Math.random() * 15.0;
+            crashPoint = (1.1 + Math.random() * 5.0);
 
             document.getElementById('waiting-text').classList.add('hidden');
+            document.getElementById('crashed-display').classList.add('hidden');
             document.getElementById('multiplier-display').classList.remove('hidden');
 
             audio.playTakeoff();
@@ -624,23 +427,10 @@
 
                 const elapsed = (Date.now() - flyStartTime) / 1000;
                 currentMultiplier = Math.max(1.00, Math.pow(1.18, elapsed));
-
                 audio.updatePitch(currentMultiplier);
 
                 document.getElementById('multiplier-display').innerText = currentMultiplier.toFixed(2) + 'x';
 
-                // Check Auto Cashouts
-                [1, 2].forEach(id => {
-                    const p = panels[id];
-                    const autoChecked = document.getElementById(`p${id}-auto-enable`).checked;
-                    const autoTarget = parseFloat(document.getElementById(`p${id}-auto-target`).value) || 2.0;
-
-                    if(p.state === 'active' && !p.cashedOut && autoChecked && currentMultiplier >= autoTarget) {
-                        cashout(id);
-                    }
-                });
-
-                // Crash Check
                 if(currentMultiplier >= crashPoint) {
                     clearInterval(flyInterval);
                     triggerCrash();
@@ -650,52 +440,27 @@
 
         function triggerCrash() {
             gameState = 'crashed';
-            audio.playCrash();
+            audio.stopEngine();
 
             document.getElementById('multiplier-display').classList.add('hidden');
             document.getElementById('crashed-display').classList.remove('hidden');
-            document.getElementById('crashed-at-val').innerText = crashPoint.toFixed(2) + 'x -də';
+            document.getElementById('crashed-at-val').innerText = crashPoint.toFixed(2) + 'x';
 
-            // Add to Multiplier History
-            addHistoryPill(crashPoint.toFixed(2));
-
-            // Mark Active Uncashed Bets as Lost
             [1, 2].forEach(id => {
                 const p = panels[id];
-                if(p.state === 'active' && !p.cashedOut) {
+                if(p.state === 'active') {
                     p.state = 'idle';
-                    p.betPlaced = false;
                     updatePanelUI(id);
                 }
             });
 
-            // Refresh online count & bets feed
-            document.getElementById('live-online-count').innerText = Math.floor(350 + Math.random() * 150);
-            generateLiveBets();
-
             setTimeout(() => {
-                startWaitingPeriod();
-            }, 3000);
+                document.getElementById('crashed-display').classList.add('hidden');
+                document.getElementById('waiting-text').classList.remove('hidden');
+                setTimeout(startFlightRound, 3000);
+            }, 2000);
         }
 
-        function addHistoryPill(val) {
-            const list = document.getElementById('history-list');
-            const num = parseFloat(val);
-            let pillClass = 'pill-blue';
-            if(num >= 2.0) pillClass = 'pill-purple';
-            if(num >= 10.0) pillClass = 'pill-magenta';
-
-            const pill = document.createElement('span');
-            pill.className = `${pillClass} px-2 py-0.5 rounded-full animate-fade-in`;
-            pill.innerText = val + 'x';
-            
-            list.insertBefore(pill, list.firstChild);
-            if(list.children.length > 12) {
-                list.removeChild(list.lastChild);
-            }
-        }
-
-        // Betting Controls Logic
         function adjustBet(id, delta) {
             const p = panels[id];
             if(p.state !== 'idle') return;
@@ -714,51 +479,20 @@
 
         function handleBetClick(id) {
             const p = panels[id];
-
             if(p.state === 'idle') {
-                if(balance < p.amount) {
-                    alert('Balansınız çatmır!');
-                    return;
-                }
-
+                if(balance < p.amount) { alert('Balansınız çatmır!'); return; }
                 balance -= p.amount;
                 updateBalanceUI();
-
-                if(gameState === 'waiting') {
-                    p.state = 'active';
-                    p.betPlaced = true;
-                    p.cashedOut = false;
-                } else {
-                    p.state = 'queued'; // Queue for next round
-                }
+                p.state = 'active';
                 updatePanelUI(id);
-
-            } else if(p.state === 'queued') {
-                // Cancel Queued Bet
-                balance += p.amount;
+            } else if(p.state === 'active' && gameState === 'flying') {
+                p.winAmount = p.amount * currentMultiplier;
+                balance += p.winAmount;
                 updateBalanceUI();
+                audio.playWin();
                 p.state = 'idle';
                 updatePanelUI(id);
-
-            } else if(p.state === 'active' && gameState === 'flying' && !p.cashedOut) {
-                // Manual Cashout
-                cashout(id);
             }
-        }
-
-        function cashout(id) {
-            const p = panels[id];
-            if(p.cashedOut || p.state !== 'active') return;
-
-            p.cashedOut = true;
-            p.winAmount = p.amount * currentMultiplier;
-            balance += p.winAmount;
-            
-            updateBalanceUI();
-            audio.playWin();
-
-            p.state = 'cashed_out';
-            updatePanelUI(id);
         }
 
         function updatePanelUI(id) {
@@ -767,94 +501,48 @@
             const label = document.getElementById(`p${id}-btn-label`);
             const val = document.getElementById(`p${id}-btn-val`);
 
-            btn.className = 'w-36 h-20 rounded-xl flex flex-col items-center justify-center text-white transition-all ';
-
             if(p.state === 'idle') {
-                btn.classList.add('btn-bet-green');
-                label.innerText = 'BET';
+                btn.className = 'w-36 h-20 btn-green-spribe flex flex-col items-center justify-center text-white';
+                label.innerText = 'Bet';
                 val.innerText = p.amount.toFixed(2) + ' USD';
-            } else if(p.state === 'queued') {
-                btn.classList.add('btn-cancel-red');
-                label.innerText = 'LƏĞV ET';
-                val.innerText = 'Gözlənilir...';
             } else if(p.state === 'active') {
-                if(gameState === 'flying') {
-                    btn.classList.add('btn-cashout-orange');
-                    label.innerText = 'CASHOUT';
-                    val.innerText = (p.amount * currentMultiplier).toFixed(2) + ' USD';
-                } else {
-                    btn.classList.add('btn-cancel-red');
-                    label.innerText = 'LƏĞV ET';
-                    val.innerText = 'Raund Başlayır';
-                }
-            } else if(p.state === 'cashed_out') {
-                btn.classList.add('btn-bet-green');
-                label.innerText = 'QAZANDIN!';
-                val.innerText = '+' + p.winAmount.toFixed(2) + ' USD';
-                
-                setTimeout(() => {
-                    p.state = 'idle';
-                    updatePanelUI(id);
-                }, 2000);
+                btn.className = 'w-36 h-20 btn-orange-spribe flex flex-col items-center justify-center text-white';
+                label.innerText = 'CASH OUT';
+                val.innerText = (p.amount * currentMultiplier).toFixed(2) + ' USD';
             }
         }
 
         function switchBetTab(id, tab) {
-            const betTab = document.getElementById(`p${id}-tab-bet`);
-            const autoTab = document.getElementById(`p${id}-tab-auto`);
-            const autoOpts = document.getElementById(`p${id}-auto-opts`);
-
+            const b = document.getElementById(`p${id}-tab-bet`);
+            const a = document.getElementById(`p${id}-tab-auto`);
             if(tab === 'bet') {
-                betTab.className = 'flex-1 py-1 rounded-md text-center tab-active';
-                autoTab.className = 'flex-1 py-1 rounded-md text-center text-gray-400';
-                autoOpts.classList.add('hidden');
+                b.className = 'flex-1 py-1 tab-btn active';
+                a.className = 'flex-1 py-1 tab-btn';
             } else {
-                autoTab.className = 'flex-1 py-1 rounded-md text-center tab-active';
-                betTab.className = 'flex-1 py-1 rounded-md text-center text-gray-400';
-                autoOpts.classList.remove('hidden');
+                a.className = 'flex-1 py-1 tab-btn active';
+                b.className = 'flex-1 py-1 tab-btn';
             }
         }
 
-        // Global UI Helpers
         function updateBalanceUI() {
-            document.getElementById('balance-val').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('balance-val').innerText = balance.toLocaleString('en-US', { minimumFractionDigits: 2 });
         }
 
-        function toggleMenu() {
-            document.getElementById('side-menu').classList.toggle('hidden');
-        }
-
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('hidden'); }
         function toggleSound() {
             audio.enabled = !audio.enabled;
             document.getElementById('sound-status').innerText = audio.enabled ? 'AÇIQ' : 'BAĞLI';
-            document.getElementById('sound-status').className = audio.enabled ? 'text-xs text-green-400' : 'text-xs text-red-500';
         }
-
-        function openDepositModal() {
-            document.getElementById('side-menu').classList.add('hidden');
-            document.getElementById('deposit-modal').classList.remove('hidden');
-        }
-
-        function closeDepositModal() {
-            document.getElementById('deposit-modal').classList.add('hidden');
-        }
-
+        function openDepositModal() { document.getElementById('deposit-modal').classList.remove('hidden'); }
+        function closeDepositModal() { document.getElementById('deposit-modal').classList.add('hidden'); }
         function confirmDeposit() {
             const amt = parseFloat(document.getElementById('dep-amount').value) || 0;
-            if(amt <= 0) return;
             balance += amt;
             updateBalanceUI();
             closeDepositModal();
-            alert(`Balansınıza ${amt} USD əlavə olundu!`);
         }
 
-        function openWithdrawModal() {
-            document.getElementById('side-menu').classList.add('hidden');
-            alert('Minimum çıxarış məbləği 20 USD-dir.');
-        }
-
-        // Start Game
-        startWaitingPeriod();
+        startFlightRound();
     </script>
 </body>
 </html>
