@@ -1,119 +1,681 @@
+```html
 <!DOCTYPE html>
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sevens on Fire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Ulduz Oyunları</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #121212; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        .profile-card {
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 15px;
+        body {
+            background: #08100b url('https://www.transparenttextures.com/patterns/poker-table.png');
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
+
+        /* Top Header */
+        .top-bar {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(8,16,11,0) 100%);
+        }
+
+        .header-title-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .header-title {
+            background: linear-gradient(180deg, #ffe57f 0%, #ffb300 40%, #ff6f00 80%, #ffd54f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 26px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8)) drop-shadow(0 0 10px rgba(255,179,0,0.4));
+            border: 2px solid #ffb300;
+            padding: 4px 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 15px rgba(255, 179, 0, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title i {
+            -webkit-text-fill-color: #ffb300;
+            font-size: 18px;
+        }
+
+        .top-right-tools {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid #ffb300;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffb300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Balance & User Row */
+        .user-balance-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            border: 1px solid #333;
+            width: 100%;
+            max-width: 360px;
+            padding: 0 10px;
         }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: #ff4500; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
-        .user-details { text-align: left; }
-        .user-name { font-weight: bold; font-size: 16px; }
-        .user-id { font-size: 12px; color: #aaa; }
 
-        .balance-box { background: #2a2a2a; padding: 8px 12px; border-radius: 8px; border: 1px solid #00ff88; }
-        .balance-val { color: #00ff88; font-weight: bold; font-size: 16px; }
+        .balance-pill {
+            background: linear-gradient(180deg, #1a0000 0%, #330000 100%);
+            border: 2px solid #ff3300;
+            border-radius: 25px;
+            padding: 4px 15px 4px 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 0 12px rgba(255, 51, 0, 0.5), inset 0 0 8px rgba(255, 0, 0, 0.4);
+        }
 
-        .action-btns { display: flex; gap: 10px; margin-bottom: 25px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-deposit { background: #28a745; }
-        .btn-withdraw { background: #dc3545; }
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffb300, #ff6f00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 0 6px rgba(255, 179, 0, 0.8);
+        }
 
-        .slot-machine { display: flex; justify-content: center; gap: 10px; margin: 25px 0; }
-        .reel { width: 85px; height: 85px; background: #222; border: 2px solid #ff9900; border-radius: 12px; font-size: 42px; line-height: 85px; box-shadow: 0 0 10px rgba(255,153,0,0.3); }
-        .btn-spin { background: #ff4500; color: white; border: none; padding: 16px; font-size: 20px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; }
+        .wallet-icon {
+            color: #ffb300;
+            font-size: 16px;
+        }
+
+        .balance-text {
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .wheel-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff0055 0%, #800022 100%);
+            border: 2px solid #ffcc00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffea00;
+            font-size: 22px;
+            box-shadow: 0 0 12px rgba(255, 0, 85, 0.7);
+            cursor: pointer;
+            animation: pulse-wheel 2s infinite alternate;
+        }
+
+        @keyframes pulse-wheel {
+            0% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 0, 85, 0.6); }
+            100% { transform: scale(1.08); box-shadow: 0 0 18px rgba(255, 234, 0, 0.9); }
+        }
+
+        /* Screens Container */
+        .screen {
+            display: none;
+            padding: 10px 15px;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Games List Grid */
+        .games-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 380px;
+            margin-top: 10px;
+        }
+
+        .game-card {
+            position: relative;
+            width: 82%;
+            height: 72px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .game-card:active {
+            transform: scale(0.96);
+        }
+
+        /* Specific Game Card Styling matching screenshot */
+        .card-aviatop {
+            background: radial-gradient(circle, #3a0007 0%, #150003 100%);
+            border: 2px solid #ff1744;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.5);
+        }
+
+        .card-extra7 {
+            background: radial-gradient(circle, #2a004a 0%, #0d001a 100%);
+            border: 2px solid #00e5ff;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        .card-hotsevens {
+            background: radial-gradient(circle, #4a1500 0%, #1a0500 100%);
+            border: 2px solid #ff9100;
+            box-shadow: 0 0 15px rgba(255, 145, 0, 0.5);
+        }
+
+        .card-sevensfire {
+            background: radial-gradient(circle, #00124a 0%, #00051a 100%);
+            border: 2px solid #d500f9;
+            box-shadow: 0 0 15px rgba(213, 0, 249, 0.5);
+        }
+
+        .card-ulduzucusu {
+            background: radial-gradient(circle, #331000 0%, #120300 100%);
+            border: 2px solid #ffc400;
+            box-shadow: 0 0 15px rgba(255, 196, 0, 0.5);
+        }
+
+        .game-logo-text {
+            position: absolute;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .game-title {
+            font-size: 20px;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        }
+
+        .badge-new {
+            position: absolute;
+            top: -6px;
+            left: 15px;
+            background: #ff1744;
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid #fff;
+            box-shadow: 0 0 6px rgba(255, 23, 68, 0.8);
+        }
+
+        .play-btn-capsule {
+            background: linear-gradient(180deg, #42a5f5 0%, #1565c0 100%);
+            border: 1px solid #e3f2fd;
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);
+        }
+
+        .play-btn-capsule.gold {
+            background: linear-gradient(180deg, #ffee58 0%, #f57f17 100%);
+            color: #000;
+            border: 1px solid #fffde7;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+        }
+
+        /* Next Page Button */
+        .next-btn-container {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-right: 25px;
+        }
+
+        .btn-next {
+            background: linear-gradient(180deg, #3e1200 0%, #1a0500 100%);
+            border: 1px solid #ff6d00;
+            color: #ffb300;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 10px rgba(255, 109, 0, 0.4);
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 400px;
+            background: linear-gradient(180deg, #1f0000 0%, #0d0000 100%);
+            border: 2px solid #ff3300;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 6px 10px;
+            box-shadow: 0 0 20px rgba(255, 51, 0, 0.6), inset 0 0 10px rgba(255, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: #ff9999;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #ffee58;
+            text-shadow: 0 0 8px rgba(255, 238, 88, 0.8);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 6px rgba(255, 238, 88, 0.9));
+        }
+
+        /* Modal Overlay for Games / Deposit / Profile */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #121212;
+            border: 2px solid #ffb300;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 360px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 179, 0, 0.5);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            font-size: 22px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        /* Slot Machine Styles */
+        .slot-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .slot-reel {
+            width: 75px;
+            height: 75px;
+            background: #222;
+            border: 2px solid #ffb300;
+            border-radius: 12px;
+            font-size: 38px;
+            line-height: 75px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .btn-spin-action {
+            background: linear-gradient(180deg, #ff4500 0%, #b30000 100%);
+            color: #fff;
+            border: 2px solid #ffaa00;
+            padding: 14px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
+            width: 100%;
+        }
+
+        /* Form Inputs for Deposit */
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ffb300;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="profile-card">
-        <div class="user-info">
-            <div class="user-avatar" id="avatar">👤</div>
-            <div class="user-details">
-                <div class="user-name" id="username">Oyunçu</div>
-                <div class="user-id" id="userid">ID: ------</div>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-right-tools">
+            <div class="icon-btn"><i class="fa-solid fa-expand"></i></div>
+        </div>
+        <div class="header-title-container">
+            <div class="header-title">
+                <i class="fa-solid fa-star"></i> Ulduz Oyunları <i class="fa-solid fa-star"></i>
             </div>
         </div>
-        <div class="balance-box">
-            <div>Balans:</div>
-            <div class="balance-val"><span id="bal">100.00</span> USDT</div>
+
+        <div class="user-balance-row">
+            <div class="balance-pill">
+                <div class="avatar-circle" id="userAvatar">U</div>
+                <i class="fa-solid fa-wallet wallet-icon"></i>
+                <div class="balance-text"><span id="balanceVal">0</span> ₼</div>
+            </div>
+            <div class="wheel-btn" onclick="openWheel()">
+                <i class="fa-solid fa-dharmachakra"></i>
+            </div>
         </div>
     </div>
 
-    <div class="action-btns">
-        <button class="btn btn-deposit" onclick="deposit()">➕ Depozit</button>
-        <button class="btn btn-withdraw" onclick="withdraw()">➖ Çıxarış</button>
+    <!-- SCREEN 1: OYUNLAR (GAMES LIST) -->
+    <div class="screen active" id="screen-oyunlar">
+        <div class="games-grid">
+
+            <!-- Aviatop -->
+            <div class="game-card card-aviatop" onclick="openGame('Aviatop')">
+                <div class="game-logo-text">
+                    <span class="game-title" style="color: #ff5252;">✈️ Aviatop</span>
+                </div>
+            </div>
+
+            <!-- Extra Super 7 -->
+            <div class="game-card card-extra7" onclick="openGame('Extra Super 7')">
+                <span class="badge-new">NEW</span>
+                <div class="game-logo-text">
+                    <span class="game-title" style="color: #ffd700;">EXTRA SUPER 7</span>
+                </div>
+                <div class="play-btn-capsule">PLAY</div>
+            </div>
+
+            <!-- Hot Sevens 7 -->
+            <div class="game-card card-hotsevens" onclick="openGame('Hot Sevens 7')">
+                <div class="game-logo-text">
+                    <span class="game-title" style="color: #ff6d00;">🔥 Hot Sevens 7</span>
+                </div>
+                <div class="play-btn-capsule">PLAY</div>
+            </div>
+
+            <!-- Sevens on Fire+ -->
+            <div class="game-card card-sevensfire" onclick="openSlotGame()">
+                <div class="game-logo-text">
+                    <span class="game-title" style="color: #e040fb;">🍒 Sevens on Fire+</span>
+                </div>
+                <div class="play-btn-capsule">PLAY</div>
+            </div>
+
+            <!-- Ulduz Uçuşu -->
+            <div class="game-card card-ulduzucusu" onclick="openGame('Ulduz Uçuşu')">
+                <div class="game-logo-text">
+                    <span class="game-title" style="color: #ffab00;">🚀 Ulduz Uçuşu</span>
+                </div>
+                <div class="play-btn-capsule gold">1.37x PLAY</div>
+            </div>
+
+        </div>
+
+        <div class="next-btn-container">
+            <div class="btn-next" onclick="alert('Növbəti səhifə tezliklə əlavə olunacaq!')">İrəli ➔</div>
+        </div>
     </div>
 
-    <h2>🔥 Sevens on Fire 🔥</h2>
-    <div class="slot-machine">
-        <div class="reel" id="r1">🎰</div>
-        <div class="reel" id="r2">7️⃣</div>
-        <div class="reel" id="r3">🎰</div>
+    <!-- SCREEN 2: DEPOZİT -->
+    <div class="screen" id="screen-depozit">
+        <div style="width: 100%; max-width: 360px; text-align: center; margin-top: 20px;">
+            <h2 style="color: #ffb300; margin-bottom: 15px;">Balans Artırılması</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Məbləği daxil edin və ödəniş üsulunu seçin:</p>
+            <input type="number" class="input-field" id="depAmount" placeholder="Məbləğ (₼)" value="10">
+            <button class="btn-spin-action" style="margin-top: 15px;" onclick="processDeposit()">
+                <i class="fa-solid fa-credit-card"></i> Depozit Et (TON / USDT)
+            </button>
+        </div>
     </div>
 
-    <button class="btn-spin" onclick="spin()">FIRLAT (1.00 USDT)</button>
+    <!-- SCREEN 3: ÇIXARIŞ -->
+    <div class="screen" id="screen-cixaris">
+        <div style="width: 100%; max-width: 360px; text-align: center; margin-top: 20px;">
+            <h2 style="color: #ff1744; margin-bottom: 15px;">Pul Çıxarışı</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Minimum çıxarış məbləği: 10 ₼</p>
+            <input type="number" class="input-field" placeholder="Məbləğ (₼)">
+            <input type="text" class="input-field" placeholder="Kripto Cüzdan və ya Kart nömrəsi">
+            <button class="btn-spin-action" style="background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%); margin-top: 15px;" onclick="alert('Çıxarış sorğusu qəbul olundu!')">
+                Sorğu Göndər
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: PROFİL -->
+    <div class="screen" id="screen-profil">
+        <div style="width: 100%; max-width: 360px; text-align: center; margin-top: 20px;">
+            <div class="avatar-circle" style="width: 70px; height: 70px; font-size: 30px; margin: 0 auto 15px auto;" id="profAvatar">U</div>
+            <h2 id="profName" style="color: #fff;">Oyunçu</h2>
+            <p id="profId" style="color: #ffb300; margin-bottom: 20px;">ID: ------</p>
+            
+            <div style="background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; text-align: left;">
+                <p><strong>Cari Balans:</strong> <span id="profBal">0</span> ₼</p>
+                <p style="margin-top: 8px;"><strong>Oyun Tariçəsi:</strong> 0 oyun</p>
+                <p style="margin-top: 8px;"><strong>Status:</strong> VIP İstifadəçi</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('oyunlar', this)">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>Oyunlar</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('depozit', this)">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Depozit</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('cixaris', this)">
+            <i class="fa-solid fa-circle-arrow-up"></i>
+            <span>Çıxarış</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('profil', this)">
+            <i class="fa-solid fa-user"></i>
+            <span>Profil</span>
+        </div>
+    </div>
+
+    <!-- SLOT MACHINE OVERLAY (Sevens on Fire+) -->
+    <div class="modal-overlay" id="slotModal">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeSlotModal()">&times;</span>
+            <h2 style="color: #ffb300; margin-bottom: 10px;">🔥 Sevens on Fire+ 🔥</h2>
+            <p>Mərc: 1 ₼</p>
+            
+            <div class="slot-container">
+                <div class="slot-reel" id="r1">7️⃣</div>
+                <div class="slot-reel" id="r2">🍒</div>
+                <div class="slot-reel" id="r3">7️⃣</div>
+            </div>
+
+            <button class="btn-spin-action" onclick="spinSlot()">FIRLAT (1 ₼)</button>
+        </div>
+    </div>
 
     <script>
+        // Telegram SDK integration
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        let balance = 0;
+
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
-            document.getElementById('username').innerText = user.first_name || "Oyunçu";
-            document.getElementById('userid').innerText = "ID: " + user.id;
-            if(user.first_name) {
-                document.getElementById('avatar').innerText = user.first_name.charAt(0).toUpperCase();
-            }
+            const name = user.first_name || "Oyunçu";
+            document.getElementById('profName').innerText = name;
+            document.getElementById('profId').innerText = "ID: " + user.id;
+            document.getElementById('userAvatar').innerText = name.charAt(0).toUpperCase();
+            document.getElementById('profAvatar').innerText = name.charAt(0).toUpperCase();
         }
 
-        let balance = 100.00;
-        const items = ['🎰', '7️⃣', '🍒', '🍋', '💎'];
+        // Tab Switcher Logic
+        function switchTab(tabName, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('screen-' + tabName).classList.add('active');
+            el.classList.add('active');
+        }
 
-        function spin() {
+        // Slot Machine Game
+        function openSlotGame() {
+            document.getElementById('slotModal').classList.add('active');
+        }
+
+        function closeSlotModal() {
+            document.getElementById('slotModal').classList.remove('active');
+        }
+
+        function openGame(title) {
+            alert(title + " oyunu tezliklə aktiv ediləcək!");
+        }
+
+        function openWheel() {
+            alert("Çərxi-Fələk: Gündəlik pulsuz fırlatma haqqınız yoxdur!");
+        }
+
+        function processDeposit() {
+            let amt = parseFloat(document.getElementById('depAmount').value) || 0;
+            if(amt <= 0) {
+                alert("Düzgün məbləğ daxil edin!");
+                return;
+            }
+            balance += amt;
+            updateBalance();
+            alert("Demo rejimdə " + amt + " ₼ balansa əlavə olundu!");
+        }
+
+        function updateBalance() {
+            document.getElementById('balanceVal').innerText = balance.toFixed(0);
+            document.getElementById('profBal').innerText = balance.toFixed(0);
+        }
+
+        const slotItems = ['7️⃣', '🍒', '🍋', '💎', '🔔'];
+        function spinSlot() {
             if (balance < 1) {
-                alert("Balansınız çatmır! Zəhmət olmasa depozit edin.");
+                alert("Balansınız çatmır! Depozit bölməsindən balansı artırın.");
                 return;
             }
             balance -= 1;
-            document.getElementById('bal').innerText = balance.toFixed(2);
+            updateBalance();
 
-            let res1 = items[Math.floor(Math.random() * items.length)];
-            let res2 = items[Math.floor(Math.random() * items.length)];
-            let res3 = items[Math.floor(Math.random() * items.length)];
+            let r1 = slotItems[Math.floor(Math.random() * slotItems.length)];
+            let r2 = slotItems[Math.floor(Math.random() * slotItems.length)];
+            let r3 = slotItems[Math.floor(Math.random() * slotItems.length)];
 
-            document.getElementById('r1').innerText = res1;
-            document.getElementById('r2').innerText = res2;
-            document.getElementById('r3').innerText = res3;
+            document.getElementById('r1').innerText = r1;
+            document.getElementById('r2').innerText = r2;
+            document.getElementById('r3').innerText = r3;
 
-            if (res1 === res2 && res2 === res3) {
-                balance += 20;
-                document.getElementById('bal').innerText = balance.toFixed(2);
-                alert("🎉 TƏBRİKLƏR! 20 USDT qazandınız!");
+            if (r1 === r2 && r2 === r3) {
+                balance += 50;
+                updateBalance();
+                alert("🎉 JACKPOT! 50 ₼ QAZANDINIZ!");
             }
-        }
-
-        function deposit() {
-            alert("Depozit sistemi tezliklə aktiv olacaq!");
-        }
-
-        function withdraw() {
-            alert("Çıxarış üçün minimum balans: 10 USDT");
         }
     </script>
 </body>
 </html>
+```
