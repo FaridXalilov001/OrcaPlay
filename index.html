@@ -4,93 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ulduz Oyunları - Casino & Aviator</title>
+    <title>OrcaPlay - Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-
+    <!-- Google Fonts Inter & Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        casinoDark: '#0b0612',
-                        casinoCard: '#150d21',
-                        goldMain: '#ffd700',
-                        goldAccent: '#ffaa00',
-                        crimsonGlow: '#ff0055',
-                        aviatorRed: '#e51c44',
-                        aviatorGreen: '#28a745'
+                        orca: {
+                            bg: '#070b14',
+                            surface: '#0d1527',
+                            card: '#131e36',
+                            border: '#1e2d4d',
+                            cyan: '#00f2fe',
+                            blue: '#4facfe',
+                            accent: '#00d2ff',
+                            aviatorRed: '#e52538',
+                            aviatorGreen: '#28a745',
+                        }
                     },
                     fontFamily: {
-                        orbitron: ['Orbitron', 'sans-serif'],
-                        rajdhani: ['Rajdhani', 'sans-serif']
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Orbitron', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-
+    
     <style>
-        /* Custom Styling for Luxury Neon Gold Casino Theme */
         body {
-            background-color: #08040d;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 170, 0, 0.15), transparent 70%),
-                radial-gradient(circle at 10% 80%, rgba(229, 28, 68, 0.1), transparent 50%);
+            background-color: #070b14;
             color: #ffffff;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Inter', sans-serif;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
-        .gold-gradient-text {
-            background: linear-gradient(135deg, #fff2a3 0%, #ffd700 50%, #cca100 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gold-border-glow {
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.15), inset 0 0 10px rgba(255, 215, 0, 0.1);
-        }
-
-        .red-btn-glow {
-            background: linear-gradient(180deg, #ff2a55 0%, #b30024 100%);
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
-        }
-        .red-btn-glow:active {
-            transform: scale(0.98);
-        }
-
-        .green-btn-glow {
-            background: linear-gradient(180deg, #28d053 0%, #158032 100%);
-            box-shadow: 0 4px 15px rgba(40, 208, 83, 0.4);
-        }
-
-        .gold-btn-glow {
-            background: linear-gradient(180deg, #ffe066 0%, #cca100 100%);
-            color: #0b0612;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-            font-weight: bold;
-        }
-
-        /* Glassmorphism Panel */
+        /* Glassmorphism utility */
         .glass-panel {
-            background: rgba(21, 13, 33, 0.75);
+            background: rgba(19, 30, 54, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 242, 254, 0.15);
         }
 
-        /* Wheel Styles */
-        .wheel-container {
-            transition: transform 4s cubic-bezier(0.15, 0.99, 0.18, 1);
+        .glass-glow {
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
         }
 
         /* Custom Scrollbar */
@@ -98,282 +67,326 @@
             width: 4px;
             height: 4px;
         }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
         ::-webkit-scrollbar-thumb {
-            background: #ffd700;
+            background: #1e2d4d;
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-track {
-            background: #150d21;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f2fe;
+        }
+
+        /* Pulse glow animation */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* Hide Canvas border overflow */
+        canvas {
+            display: block;
         }
     </style>
 </head>
-<body class="pb-24 min-h-screen flex flex-col justify-between">
+<body class="flex flex-col min-h-screen max-w-md mx-auto bg-orca-bg overflow-x-hidden pb-20">
 
-    <!-- HEADER SECTION -->
-    <header class="sticky top-0 z-40 glass-panel border-b border-goldMain/30 px-4 py-3 shadow-2xl">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            
-            <!-- User Profile info -->
-            <div class="flex items-center space-x-2">
-                <div id="userAvatar" class="w-10 h-10 rounded-full bg-gradient-to-tr from-goldAccent to-crimsonGlow flex items-center justify-center text-black font-extrabold text-lg shadow-md border border-goldMain">
-                    U
-                </div>
-                <div class="flex flex-col">
-                    <span id="userName" class="text-xs font-bold text-gray-200 tracking-wide truncate max-w-[100px]">Oyuncu</span>
-                    <span id="userId" class="text-[10px] text-goldMain/70 font-mono">ID: 849201</span>
-                </div>
+    <!-- TOP USER HEADER -->
+    <header class="sticky top-0 z-40 bg-orca-surface/90 backdrop-blur-md border-b border-orca-border p-3 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="relative">
+                <img id="user-avatar" src="https://placehold.co/100x100/0d1527/00f2fe?text=ORCA" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-orca-cyan object-cover">
+                <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-orca-surface rounded-full"></span>
             </div>
-
-            <!-- Header Center: Logo -->
-            <div class="text-center">
-                <h1 class="font-orbitron font-black text-sm tracking-wider gold-gradient-text drop-shadow">🔥 ULDUZ 🔥</h1>
-                <span class="text-[9px] uppercase tracking-widest text-red-400 font-bold">CASINO VIP</span>
+            <div>
+                <h1 id="user-name" class="font-bold text-sm text-white tracking-wide leading-tight">İstifadəçi</h1>
+                <p id="user-id" class="text-xs text-orca-cyan/70 font-mono">ID: 84920412</p>
             </div>
+        </div>
 
-            <!-- Balance & Wheel Quick Trigger -->
-            <div class="flex items-center space-x-2">
-                <!-- Balance Box -->
-                <div class="bg-black/60 border border-goldMain/40 rounded-lg px-2.5 py-1 text-right flex flex-col justify-center">
-                    <span class="text-[9px] text-gray-400 leading-none">BALANS</span>
-                    <span id="userBalance" class="font-orbitron text-sm font-bold text-goldMain leading-tight">100.00 ₼</span>
-                </div>
-
-                <!-- Wheel Button -->
-                <button onclick="openModal('wheelModal')" class="w-9 h-9 rounded-full bg-gradient-to-r from-amber-500 to-red-600 flex items-center justify-center border border-goldMain shadow-lg animate-pulse">
-                    <i class="fa-solid font-bold fa-dharmachakra text-black text-lg"></i>
-                </button>
-            </div>
+        <!-- BALANCE DISPLAY -->
+        <div class="flex items-center space-x-2 bg-orca-bg px-3 py-1.5 rounded-full border border-orca-cyan/30">
+            <i class="fa-solid me-1 text-xs text-orca-cyan fa-wallet"></i>
+            <span id="balance-display" class="font-mono font-bold text-emerald-400 text-sm">100.00</span>
+            <span class="text-xs font-semibold text-orca-cyan">₼</span>
+            <button onclick="switchTab('tab-deposit')" class="ml-1 bg-orca-cyan text-orca-bg p-1 rounded-full text-xs hover:bg-white transition">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+            </button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT VIEW ROUTER -->
-    <main class="max-w-md mx-auto w-full px-3 pt-3 flex-1">
+    <!-- BRAND BAR -->
+    <div class="px-4 pt-3 pb-1 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-orca text-2xl text-orca-cyan"></i>
+            <span class="font-mono font-black text-xl bg-gradient-to-r from-orca-cyan via-orca-blue to-white bg-clip-text text-transparent">ORCAPLAY</span>
+        </div>
+        <div class="text-xs px-2.5 py-1 rounded-md bg-orca-card border border-orca-border text-gray-300 font-mono">
+            <i class="fa-solid fa-signal text-emerald-400 mr-1 text-[10px]"></i> CANLI
+        </div>
+    </div>
 
-        <!-- VIEW 1: GAMES TAB (AVIATOR & SLOT) -->
-        <section id="gamesTab" class="tab-content space-y-4">
-            
-            <!-- AVIATOR / CRASH GAME CARD -->
-            <div class="glass-panel rounded-2xl p-3 border border-red-500/30 relative overflow-hidden">
-                
-                <!-- Game Header Bar -->
-                <div class="flex justify-between items-center mb-2">
-                    <div class="flex items-center space-x-2">
-                        <span class="bg-aviatorRed text-white text-[10px] font-orbitron px-2 py-0.5 rounded font-black tracking-wider uppercase animate-pulse">LIVE</span>
-                        <h2 class="font-orbitron font-black text-base text-white tracking-wide">ULDUZ UÇUŞU <span class="text-xs text-red-500">(AVIATOR)</span></h2>
-                    </div>
-                    <span class="text-xs text-goldMain font-mono font-bold" id="onlinePlayers">🟢 1,420 Canlı</span>
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 p-3">
+
+        <!-- TAB 1: OYUNLAR (GAMES MENU) -->
+        <section id="tab-games" class="tab-content space-y-4">
+            <div class="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-r from-orca-surface via-orca-card to-orca-border border border-orca-cyan/20">
+                <div class="relative z-10">
+                    <span class="bg-orca-cyan/20 text-orca-cyan text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-orca-cyan/30">Xüsusi Təklif</span>
+                    <h2 class="text-2xl font-black mt-2 text-white">Xoş Gəldiniz!</h2>
+                    <p class="text-xs text-gray-300 mt-1 max-w-[220px]">Ən məşhur real Aviator simulyatorunda bəxtinizi sınayın.</p>
                 </div>
+                <i class="fa-solid fa-plane-departure text-7xl absolute right-[-10px] bottom-[-10px] text-orca-cyan/10 transform -rotate-12"></i>
+            </div>
 
-                <!-- Previous Multipliers Bar -->
-                <div id="multiplierHistory" class="flex items-center space-x-1.5 overflow-x-auto py-1 mb-2 text-xs font-orbitron no-scrollbar border-y border-white/5">
-                    <span class="px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-500/30 font-bold">1.24x</span>
-                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-500/30 font-bold">3.80x</span>
-                    <span class="px-2 py-0.5 rounded bg-pink-900/60 text-pink-300 border border-pink-500/30 font-bold">15.20x</span>
-                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-500/30 font-bold">1.05x</span>
-                    <span class="px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-500/30 font-bold">2.10x</span>
-                </div>
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-base text-gray-200 flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad text-orca-cyan"></i> Mövcud Oyunlar
+                </h3>
+                <span class="text-xs text-gray-400">1 Oyun Aktivdir</span>
+            </div>
 
-                <!-- Aviator Canvas Flight Radar -->
-                <div class="relative w-full h-56 bg-black/90 rounded-xl overflow-hidden border border-red-900/40 shadow-inner">
-                    <!-- Dynamic Radar Grid Canvas -->
-                    <canvas id="aviatorCanvas" class="w-full h-full block"></canvas>
+            <!-- AVIATOR GAME CARD -->
+            <div onclick="launchAviator()" class="group relative rounded-2xl overflow-hidden glass-panel border border-orca-cyan/30 hover:border-orca-cyan transition-all duration-300 cursor-pointer shadow-xl">
+                <div class="h-40 bg-gradient-to-br from-slate-900 via-zinc-900 to-red-950 relative flex items-center justify-center p-4">
+                    <!-- Background Animated Grid Effect -->
+                    <div class="absolute inset-0 bg-[radial-gradient(#e52538_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
                     
-                    <!-- Overlay Multiplier Text -->
-                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span id="aviatorStatus" class="font-orbitron text-xs text-gray-400 uppercase tracking-widest mb-1">Növbəti raund gözlənilir...</span>
-                        <span id="aviatorMultiplier" class="font-orbitron text-4xl md:text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">1.00x</span>
+                    <!-- Aviator Visual Logo Header -->
+                    <div class="text-center z-10">
+                        <div class="inline-flex items-center space-x-2 text-red-500 font-mono font-black text-3xl tracking-wider uppercase mb-1">
+                            <i class="fa-solid fa-plane-up animate-bounce"></i>
+                            <span>AVIATOR</span>
+                        </div>
+                        <p class="text-xs text-red-300/80 font-mono">ORIGINAL SPRIBE SIMULATOR</p>
                     </div>
+
+                    <span class="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest shadow-lg">HOT</span>
                 </div>
-
-                <!-- Dual/Single Bet Panel Controls -->
-                <div class="mt-3 bg-black/40 p-3 rounded-xl border border-white/10 space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <!-- Quick Preset Amounts -->
-                        <div class="flex space-x-1">
-                            <button onclick="setAviatorBet(1)" class="flex-1 py-1 bg-white/5 border border-white/10 rounded text-xs hover:bg-goldMain hover:text-black font-bold">1 ₼</button>
-                            <button onclick="setAviatorBet(5)" class="flex-1 py-1 bg-white/5 border border-white/10 rounded text-xs hover:bg-goldMain hover:text-black font-bold">5 ₼</button>
-                            <button onclick="setAviatorBet(10)" class="flex-1 py-1 bg-white/5 border border-white/10 rounded text-xs hover:bg-goldMain hover:text-black font-bold">10 ₼</button>
-                            <button onclick="setAviatorBet(50)" class="flex-1 py-1 bg-white/5 border border-white/10 rounded text-xs hover:bg-goldMain hover:text-black font-bold">50 ₼</button>
-                        </div>
-                        <!-- Auto Cashout Setting -->
-                        <div class="flex items-center bg-white/5 rounded border border-white/10 px-2">
-                            <span class="text-[10px] text-gray-400 mr-1 uppercase font-bold">Auto Çıxar:</span>
-                            <input type="number" id="autoCashoutInput" placeholder="məs: 2.0" step="0.1" class="w-full bg-transparent text-xs text-goldMain font-orbitron text-right focus:outline-none">
-                            <span class="text-xs text-gray-400 ml-0.5">x</span>
-                        </div>
+                <div class="p-4 bg-orca-card flex items-center justify-between border-t border-orca-border">
+                    <div>
+                        <h4 class="font-bold text-base text-white group-hover:text-orca-cyan transition">Aviator Official</h4>
+                        <p class="text-xs text-gray-400">Yüksək əmsallar və canlı qrafik</p>
                     </div>
+                    <button class="bg-gradient-to-r from-orca-cyan to-orca-blue text-orca-bg font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1 shadow-md group-hover:scale-105 transition">
+                        Oyna <i class="fa-solid fa-play text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
 
-                    <div class="flex items-center space-x-2">
-                        <!-- Bet Input -->
-                        <div class="w-1/3 relative">
-                            <input type="number" id="aviatorBetAmount" value="2.00" min="0.2" step="0.5" class="w-full bg-black/80 border border-goldMain/50 text-goldMain font-orbitron text-center py-2.5 rounded-lg text-sm font-bold focus:outline-none">
-                            <span class="absolute right-2 top-3 text-[10px] text-gray-400">AZN</span>
-                        </div>
-                        <!-- Main Action Button (BET / CASHOUT) -->
-                        <button id="aviatorBtn" onclick="handleAviatorAction()" class="flex-1 py-2.5 rounded-lg font-orbitron font-black text-sm uppercase tracking-wider red-btn-glow text-white transition-all">
-                            MƏRC ET
-                        </button>
-                    </div>
+        <!-- TAB 2: AUTHENTIC AVIATOR MODULE -->
+        <section id="tab-aviator" class="tab-content hidden space-y-3">
+            
+            <!-- BACK BUTTON BAR -->
+            <div class="flex items-center justify-between bg-orca-surface p-2.5 rounded-xl border border-orca-border">
+                <button onclick="switchTab('tab-games')" class="text-xs text-gray-300 hover:text-white flex items-center gap-2 font-medium">
+                    <i class="fa-solid fa-chevron-left text-orca-cyan"></i> Menyuyə Qayıt
+                </button>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs font-mono text-red-500 font-bold uppercase"><i class="fa-solid fa-circle text-[8px] animate-ping mr-1"></i> Aviator Live</span>
+                    <button onclick="toggleAudio()" id="audio-btn" class="text-gray-400 hover:text-white text-sm px-2">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- SLOT MACHINE CARD ("HOT SEVENS 777") -->
-            <div class="glass-panel rounded-2xl p-4 border border-goldMain/30 relative">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="font-orbitron font-black text-base text-goldMain flex items-center">
-                        <i class="fa-solid fa-fire text-red-500 mr-2"></i> HOT SEVENS 777
-                    </h2>
-                    <span class="text-xs bg-goldMain/20 text-goldMain px-2 py-0.5 rounded border border-goldMain/40 font-bold">3x3 LUXURY SLOT</span>
+            <!-- AVIATOR TOP HISTORY MULTIPLIERS BAR -->
+            <div id="history-bar" class="flex items-center gap-1.5 overflow-x-auto py-1 px-1 bg-black/40 rounded-lg border border-orca-border/50 text-xs font-mono">
+                <span class="bg-indigo-900/60 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full text-[11px]">1.24x</span>
+                <span class="bg-blue-900/60 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full text-[11px]">2.15x</span>
+                <span class="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full text-[11px]">14.80x</span>
+                <span class="bg-blue-900/60 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full text-[11px]">1.05x</span>
+                <span class="bg-indigo-900/60 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full text-[11px]">1.88x</span>
+                <span class="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full text-[11px]">5.40x</span>
+            </div>
+
+            <!-- MAIN FLIGHT CANVAS DISPLAY CONTAINER -->
+            <div class="relative w-full h-56 bg-zinc-950 rounded-2xl overflow-hidden border border-red-900/40 shadow-2xl flex flex-col justify-between p-3">
+                <!-- Grid background overlay -->
+                <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+                <!-- Live Status & Multiplier Display -->
+                <div class="relative z-10 text-center my-auto">
+                    <div id="multiplier-display" class="font-mono font-black text-4xl text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+                        WAITING...
+                    </div>
+                    <div id="status-subtext" class="text-xs text-gray-400 font-mono mt-1">Növbəti raund başlayır</div>
                 </div>
 
-                <!-- Slot Machine Reels Window -->
-                <div class="bg-black/80 border-2 border-goldMain/60 rounded-xl p-3 shadow-[inset_0_0_20px_rgba(255,215,0,0.2)] mb-3">
-                    <div class="grid grid-cols-3 gap-2 text-center text-4xl">
-                        <div id="reel1" class="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-lg py-4 border border-goldMain/30 shadow-md transform transition-all duration-200">💎</div>
-                        <div id="reel2" class="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-lg py-4 border border-goldMain/30 shadow-md transform transition-all duration-200">7️⃣</div>
-                        <div id="reel3" class="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-lg py-4 border border-goldMain/30 shadow-md transform transition-all duration-200">👑</div>
-                    </div>
-                </div>
+                <!-- HTML5 Canvas for Graph Curved Line & Plane -->
+                <canvas id="aviatorCanvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+            </div>
 
-                <!-- Slot Controls -->
-                <div class="flex items-center justify-between space-x-2">
-                    <div class="flex items-center space-x-1 bg-black/60 p-1.5 rounded-lg border border-white/10">
-                        <button onclick="adjustSlotBet(-1)" class="w-7 h-7 bg-white/10 text-goldMain rounded font-bold hover:bg-goldMain hover:text-black">-</button>
-                        <span id="slotBetText" class="font-orbitron text-xs text-goldMain font-bold px-2">1.00 ₼</span>
-                        <button onclick="adjustSlotBet(1)" class="w-7 h-7 bg-white/10 text-goldMain rounded font-bold hover:bg-goldMain hover:text-black">+</button>
+            <!-- DUAL BETTING PANEL -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                
+                <!-- BET CONTROL BOX 1 -->
+                <div class="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-3 flex flex-col justify-between space-y-2">
+                    <div class="flex items-center justify-between text-xs text-gray-400 border-b border-zinc-800 pb-1.5">
+                        <span class="font-bold text-gray-300">MƏRC 1</span>
+                        <label class="flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" id="auto-cashout-check" class="rounded bg-zinc-800 border-zinc-700 text-orca-cyan focus:ring-0">
+                            <span>Avto Çıxarış</span>
+                            <input type="number" id="auto-cashout-val" value="2.00" step="0.1" class="w-12 bg-zinc-800 border border-zinc-700 text-white text-center rounded px-1 py-0.5 text-[10px]">
+                        </label>
                     </div>
 
-                    <button id="spinSlotBtn" onclick="spinSlotMachine()" class="flex-1 py-2.5 gold-btn-glow rounded-lg font-orbitron font-black text-sm uppercase tracking-wider">
-                        OYNAT (SPIN)
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl p-1.5 flex items-center justify-between">
+                            <button onclick="adjustBet(-1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-white font-bold hover:bg-zinc-700">-</button>
+                            <input type="number" id="bet-amount" value="1.00" min="0.1" step="0.5" class="w-16 bg-transparent text-center font-mono font-bold text-white text-sm focus:outline-none">
+                            <button onclick="adjustBet(1)" class="w-7 h-7 bg-zinc-800 rounded-lg text-white font-bold hover:bg-zinc-700">+</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1 text-[10px] font-mono">
+                            <button onclick="setBet(1)" class="bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded text-gray-300">+1₼</button>
+                            <button onclick="setBet(2)" class="bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded text-gray-300">+2₼</button>
+                            <button onclick="setBet(5)" class="bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded text-gray-300">+5₼</button>
+                            <button onclick="setBet(10)" class="bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded text-gray-300">+10₼</button>
+                        </div>
+                    </div>
+
+                    <!-- ACTION BUTTON -->
+                    <button id="btn-action-1" onclick="handleBetAction()" class="w-full py-3 rounded-xl font-bold font-mono text-white text-sm shadow-lg transition duration-200 uppercase bg-orca-aviatorGreen hover:brightness-110 active:scale-98">
+                        MƏRC ET <br><span class="text-[10px] font-normal opacity-90">1.00 ₼</span>
                     </button>
+                </div>
+
+            </div>
+
+            <!-- LIVE PLAYER LEADERBOARD / BETS TABLE -->
+            <div class="bg-zinc-950/80 rounded-2xl border border-zinc-800 p-3">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-2 mb-2">
+                    <span class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-orca-cyan"></i> Canlı Mərclər
+                    </span>
+                    <span id="active-players-count" class="text-[11px] font-mono text-orca-cyan bg-orca-cyan/10 px-2 py-0.5 rounded-full border border-orca-cyan/20">38 Oyunçu</span>
+                </div>
+
+                <div id="bets-table" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs font-mono">
+                    <!-- Dynamic live player rows will be inserted here -->
                 </div>
             </div>
 
         </section>
 
-        <!-- VIEW 2: DEPOSIT (DEPOZİT) TAB -->
-        <section id="depositTab" class="tab-content hidden space-y-4">
-            <div class="glass-panel rounded-2xl p-4 border border-goldMain/30">
-                <h2 class="font-orbitron font-black text-lg text-goldMain mb-1">BALANS ARTIRILMASI</h2>
-                <p class="text-xs text-gray-300 mb-4">Milli kartlar və ya Kripto vasitəsilə dərhal balansa əlavə edin.</p>
+        <!-- TAB 3: DEPOZİT (DEPOSIT) -->
+        <section id="tab-deposit" class="tab-content hidden space-y-4">
+            <div class="bg-orca-surface rounded-2xl p-4 border border-orca-border space-y-3">
+                <h3 class="font-bold text-base text-white flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-orca-cyan"></i> Balansı Artır
+                </h3>
+                <p class="text-xs text-gray-400">Ödəniş üsulunu seçin və test balansı dərhal hesabınıza əlavə edin.</p>
 
-                <!-- Payment Methods Selector -->
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button onclick="selectPaymentMethod('m10')" class="pay-method-btn p-3 bg-black/60 border border-goldMain/50 rounded-xl flex items-center space-x-2 text-left active-pay">
-                        <i class="fa-solid fa-wallet text-goldMain text-xl"></i>
+                <!-- PAYMENT GATEWAY OPTIONS -->
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <div onclick="selectPayment('Bank Kartı (Visa/Master)')" class="payment-card border border-orca-cyan bg-orca-card p-3 rounded-xl flex items-center space-x-3 cursor-pointer">
+                        <i class="fa-solid fa-credit-card text-orca-cyan text-xl"></i>
                         <div>
-                            <div class="text-xs font-bold text-white">m10 / eManat</div>
-                            <div class="text-[9px] text-green-400">Anında köçürmə</div>
+                            <div class="text-xs font-bold">Bank Kartı</div>
+                            <div class="text-[10px] text-gray-400">Visa / Mastercard</div>
                         </div>
-                    </button>
-
-                    <button onclick="selectPaymentMethod('card')" class="pay-method-btn p-3 bg-black/60 border border-white/10 rounded-xl flex items-center space-x-2 text-left">
-                        <i class="fa-solid fa-credit-card text-blue-400 text-xl"></i>
+                    </div>
+                    <div onclick="selectPayment('USDT (TRC20)')" class="payment-card border border-orca-border bg-orca-card p-3 rounded-xl flex items-center space-x-3 cursor-pointer opacity-70 hover:opacity-100">
+                        <i class="fa-solid fa-coins text-emerald-400 text-xl"></i>
                         <div>
-                            <div class="text-xs font-bold text-white">Bank Kartı</div>
-                            <div class="text-[9px] text-gray-400">Visa / Mastercard</div>
+                            <div class="text-xs font-bold">USDT</div>
+                            <div class="text-[10px] text-gray-400">TRC20 / BEP20</div>
                         </div>
-                    </button>
-
-                    <button onclick="selectPaymentMethod('usdt')" class="pay-method-btn p-3 bg-black/60 border border-white/10 rounded-xl flex items-center space-x-2 text-left">
-                        <i class="fa-solid fa-coins text-green-400 text-xl"></i>
-                        <div>
-                            <div class="text-xs font-bold text-white">USDT (TRC20)</div>
-                            <div class="text-[9px] text-gray-400">Kripto depozit</div>
-                        </div>
-                    </button>
-
-                    <button onclick="selectPaymentMethod('ton')" class="pay-method-btn p-3 bg-black/60 border border-white/10 rounded-xl flex items-center space-x-2 text-left">
-                        <i class="fa-solid fa-paper-plane text-sky-400 text-xl"></i>
-                        <div>
-                            <div class="text-xs font-bold text-white">TON Wallet</div>
-                            <div class="text-[9px] text-gray-400">Telegram Crypto</div>
-                        </div>
-                    </button>
+                    </div>
                 </div>
 
-                <!-- Preset Amounts -->
-                <label class="text-xs font-bold text-gray-300 mb-2 block">Məbləği Seçin və ya daxil edin:</label>
-                <div class="grid grid-cols-4 gap-2 mb-3">
-                    <button onclick="setDepositAmount(10)" class="py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-goldMain hover:bg-goldMain hover:text-black">10 ₼</button>
-                    <button onclick="setDepositAmount(25)" class="py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-goldMain hover:bg-goldMain hover:text-black">25 ₼</button>
-                    <button onclick="setDepositAmount(50)" class="py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-goldMain hover:bg-goldMain hover:text-black">50 ₼</button>
-                    <button onclick="setDepositAmount(100)" class="py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-goldMain hover:bg-goldMain hover:text-black">100 ₼</button>
+                <!-- AMOUNT INPUT -->
+                <div class="pt-2">
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Məbləğ (AZN / ₼)</label>
+                    <div class="relative">
+                        <input type="number" id="deposit-amount-input" value="20" min="5" class="w-full bg-orca-bg border border-orca-border rounded-xl px-3 py-2.5 text-white font-mono font-bold focus:outline-none focus:border-orca-cyan">
+                        <span class="absolute right-3 top-2.5 text-orca-cyan font-bold text-sm">₼</span>
+                    </div>
                 </div>
 
-                <div class="relative mb-4">
-                    <input type="number" id="depositInput" placeholder="Məbləğ (AZN)" class="w-full bg-black/80 border border-goldMain/40 rounded-xl py-3 px-4 text-white font-orbitron focus:outline-none focus:border-goldMain">
-                    <span class="absolute right-4 top-3.5 text-xs text-goldMain font-bold">AZN</span>
+                <!-- QUICK AMOUNT BUTTONS -->
+                <div class="flex gap-2">
+                    <button onclick="setDepositValue(10)" class="flex-1 bg-orca-card border border-orca-border py-1.5 rounded-lg text-xs font-mono font-bold hover:border-orca-cyan">+10₼</button>
+                    <button onclick="setDepositValue(25)" class="flex-1 bg-orca-card border border-orca-border py-1.5 rounded-lg text-xs font-mono font-bold hover:border-orca-cyan">+25₼</button>
+                    <button onclick="setDepositValue(50)" class="flex-1 bg-orca-card border border-orca-border py-1.5 rounded-lg text-xs font-mono font-bold hover:border-orca-cyan">+50₼</button>
+                    <button onclick="setDepositValue(100)" class="flex-1 bg-orca-card border border-orca-border py-1.5 rounded-lg text-xs font-mono font-bold hover:border-orca-cyan">+100₼</button>
                 </div>
 
-                <button onclick="executeDeposit()" class="w-full py-3 font-orbitron font-black text-sm uppercase gold-btn-glow rounded-xl shadow-lg">
+                <button onclick="executeMockDeposit()" class="w-full mt-2 bg-gradient-to-r from-orca-cyan to-orca-blue text-orca-bg font-bold py-3 rounded-xl text-sm shadow-lg hover:brightness-110 active:scale-98 transition">
                     DEPOZİTİ TƏSDİQLƏ
                 </button>
             </div>
         </section>
 
-        <!-- VIEW 3: WITHDRAW (ÇIXARIŞ) TAB -->
-        <section id="withdrawTab" class="tab-content hidden space-y-4">
-            <div class="glass-panel rounded-2xl p-4 border border-goldMain/30">
-                <h2 class="font-orbitron font-black text-lg text-goldMain mb-1">PUL ÇIXARIŞI</h2>
-                <p class="text-xs text-gray-300 mb-4">Qazancınızı m10 və ya Bank kartınıza dərhal çəkin.</p>
+        <!-- TAB 4: ÇIXARIŞ (WITHDRAW) -->
+        <section id="tab-withdraw" class="tab-content hidden space-y-4">
+            <div class="bg-orca-surface rounded-2xl p-4 border border-orca-border space-y-3">
+                <h3 class="font-bold text-base text-white flex items-center gap-2">
+                    <i class="fa-solid fa-money-bill-transfer text-orca-cyan"></i> Məbləğ Çıxarışı
+                </h3>
+                <p class="text-xs text-gray-400">Qazancınızı bank kartınıza və ya kripto kisənizə köçürün.</p>
 
-                <div class="space-y-3 mb-4">
-                    <div>
-                        <label class="text-xs text-gray-300 block mb-1">Çıxarış Üsulu</label>
-                        <select id="withdrawMethod" class="w-full bg-black/80 border border-white/20 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:border-goldMain">
-                            <option value="card">Bank Kartı (Visa / Mastercard)</option>
-                            <option value="m10">m10 Portfeli</option>
-                            <option value="usdt">USDT TRC20 Wallet</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="text-xs text-gray-300 block mb-1">Kart / Hesab Nömrəsi</label>
-                        <input type="text" id="withdrawAccount" placeholder="4127 0000 0000 0000" class="w-full bg-black/80 border border-white/20 rounded-xl py-2.5 px-3 text-xs text-white font-mono focus:outline-none focus:border-goldMain">
-                    </div>
-
-                    <div>
-                        <label class="text-xs text-gray-300 block mb-1">Məbləğ (AZN)</label>
-                        <input type="number" id="withdrawAmount" placeholder="Min. 10 AZN" class="w-full bg-black/80 border border-white/20 rounded-xl py-2.5 px-3 text-xs text-white font-orbitron focus:outline-none focus:border-goldMain">
-                    </div>
+                <div class="pt-2">
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Çıxarış Üsulu</label>
+                    <select id="withdraw-method" class="w-full bg-orca-bg border border-orca-border rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-orca-cyan">
+                        <option value="Card">Bank Kartı (AZN)</option>
+                        <option value="Crypto">CryptoBot / Wallet (USDT)</option>
+                    </select>
                 </div>
 
-                <button onclick="executeWithdrawal()" class="w-full py-3 font-orbitron font-black text-sm uppercase red-btn-glow text-white rounded-xl shadow-lg">
-                    ÇIXARIŞ TƏLƏB ET
+                <div>
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Rekvizitlər (Kart və ya Cüzdan)</label>
+                    <input type="text" id="withdraw-details" placeholder="4169 **** **** 0000" class="w-full bg-orca-bg border border-orca-border rounded-xl px-3 py-2.5 text-white text-xs font-mono focus:outline-none focus:border-orca-cyan">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Məbləğ (AZN)</label>
+                    <input type="number" id="withdraw-amount" placeholder="Mümkün balans: 100 ₼" class="w-full bg-orca-bg border border-orca-border rounded-xl px-3 py-2.5 text-white font-mono text-xs focus:outline-none focus:border-orca-cyan">
+                </div>
+
+                <button onclick="executeMockWithdraw()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-orca-bg font-bold py-3 rounded-xl text-sm shadow-lg active:scale-98 transition">
+                    TƏLƏBİ GÖNDƏR
                 </button>
-            </div>
-
-            <!-- Transaction History Log -->
-            <div class="glass-panel rounded-2xl p-4 border border-white/10">
-                <h3 class="font-orbitron text-xs font-bold text-gray-300 mb-2">SON ƏMƏLİYYATLAR</h3>
-                <div id="txHistory" class="space-y-2 text-xs font-mono">
-                    <div class="flex justify-between items-center bg-black/40 p-2 rounded border border-white/5">
-                        <span class="text-green-400">+50.00 AZN (Depozit)</span>
-                        <span class="text-gray-500 text-[10px]">Tamamlandı</span>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- VIEW 4: PROFILE (PROFİL) TAB -->
-        <section id="profileTab" class="tab-content hidden space-y-4">
-            <div class="glass-panel rounded-2xl p-4 border border-goldMain/30 text-center relative overflow-hidden">
-                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-goldMain to-crimsonGlow flex items-center justify-center text-black font-black text-3xl mb-2 border-2 border-goldMain shadow-xl">
-                    <span id="profileAvatarLetter">U</span>
+        <!-- TAB 5: PROFİL (PROFILE) -->
+        <section id="tab-profile" class="tab-content hidden space-y-4">
+            <div class="bg-orca-surface rounded-2xl p-4 border border-orca-border space-y-4 text-center">
+                <div class="relative w-20 h-20 mx-auto">
+                    <img id="profile-avatar" src="https://placehold.co/100x100/0d1527/00f2fe?text=ORCA" class="w-full h-full rounded-full border-2 border-orca-cyan object-cover">
                 </div>
-                <h2 id="profileName" class="font-orbitron font-bold text-base text-white">Oyuncu</h2>
-                <p id="profileId" class="text-xs text-goldMain font-mono">ID: 849201</p>
+                <div>
+                    <h3 id="profile-name" class="font-bold text-lg text-white">İstifadəçi</h3>
+                    <p id="profile-id" class="text-xs text-orca-cyan font-mono">ID: 84920412</p>
+                </div>
 
-                <!-- User Stats -->
-                <div class="grid grid-cols-2 gap-2 mt-4 text-left">
-                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/10">
-                        <span class="text-[10px] text-gray-400 block">ÜMUMİ MƏRCLƏR</span>
-                        <span id="statTotalBets" class="font-orbitron text-sm text-goldMain font-bold">0.00 ₼</span>
+                <!-- STATS GRID -->
+                <div class="grid grid-cols-2 gap-2 text-left pt-2">
+                    <div class="bg-orca-card p-3 rounded-xl border border-orca-border">
+                        <div class="text-[10px] text-gray-400 uppercase">Ümumi Mərclər</div>
+                        <div id="stat-total-bets" class="font-mono font-bold text-sm text-white mt-0.5">0</div>
                     </div>
-                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/10">
-                        <span class="text-[10px] text-gray-400 block">ÜMUMİ QAZANC</span>
-                        <span id="statTotalWins" class="font-orbitron text-sm text-green-400 font-bold">0.00 ₼</span>
+                    <div class="bg-orca-card p-3 rounded-xl border border-orca-border">
+                        <div class="text-[10px] text-gray-400 uppercase">Qazanılan Məbləğ</div>
+                        <div id="stat-total-win" class="font-mono font-bold text-sm text-emerald-400 mt-0.5">0.00 ₼</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORY LIST -->
+            <div class="bg-orca-surface rounded-2xl p-4 border border-orca-border space-y-2">
+                <h4 class="font-bold text-xs text-gray-300 uppercase tracking-wider mb-2">Son Əməliyyatlar</h4>
+                <div id="history-list" class="space-y-2 text-xs font-mono">
+                    <div class="flex justify-between items-center bg-orca-card p-2 rounded border border-orca-border/50">
+                        <span class="text-emerald-400">+100.00 ₼ (Xoşgəldin Bonusu)</span>
+                        <span class="text-gray-500 text-[10px]">Tamamlandı</span>
                     </div>
                 </div>
             </div>
@@ -381,569 +394,538 @@
 
     </main>
 
-    <!-- WHEEL OF FORTUNE MODAL (ÇƏRXİFƏLƏK) -->
-    <div id="wheelModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel rounded-3xl p-5 w-full max-w-sm text-center border-2 border-goldMain/60 relative">
-            <button onclick="closeModal('wheelModal')" class="absolute top-3 right-3 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
-            
-            <h2 class="font-orbitron font-black text-lg gold-gradient-text mb-1">ÇƏRXİFƏLƏK VIP</h2>
-            <p class="text-xs text-gray-300 mb-4">Gündəlik pulsuz hədiyyənizi qazanın!</p>
-
-            <!-- Wheel Canvas Container -->
-            <div class="relative w-64 h-64 mx-auto mb-4 flex items-center justify-center">
-                <!-- Wheel Pointer -->
-                <div class="absolute -top-2 z-20 text-red-500 text-2xl drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
-                    <i class="fa-solid fa-location-pin fa-rotate-180"></i>
-                </div>
-                <!-- Wheel canvas -->
-                <canvas id="wheelCanvas" width="250" height="250" class="wheel-container rounded-full shadow-[0_0_25px_rgba(255,215,0,0.3)]"></canvas>
-            </div>
-
-            <button id="spinWheelBtn" onclick="spinWheel()" class="w-full py-3 gold-btn-glow font-orbitron font-black rounded-xl uppercase tracking-wider text-sm shadow-xl">
-                ÇƏRXİ DÖNDƏR (SPIN)
-            </button>
-        </div>
+    <!-- CUSTOM TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-orca-card border border-orca-cyan text-white text-xs px-4 py-2.5 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <i id="toast-icon" class="fa-solid fa-circle-info text-orca-cyan"></i>
+        <span id="toast-msg">Bildiriş</span>
     </div>
 
-    <!-- NOTIFICATION TOAST -->
-    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-goldMain text-black px-4 py-2 rounded-full font-bold text-xs shadow-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none">
-        Uğurla tamamlandı!
-    </div>
-
-    <!-- BOTTOM FIXED NAVBAR -->
-    <nav class="fixed bottom-0 left-0 right-0 z-40 glass-panel border-t border-goldMain/30 py-2">
-        <div class="max-w-md mx-auto grid grid-cols-4 text-center">
-            <button onclick="switchTab('gamesTab')" class="nav-btn text-goldMain flex flex-col items-center">
-                <i class="fa-solid fa-gamepad text-lg"></i>
-                <span class="text-[10px] font-bold mt-0.5">Oyunlar</span>
-            </button>
-            <button onclick="switchTab('depositTab')" class="nav-btn text-gray-400 flex flex-col items-center hover:text-goldMain">
-                <i class="fa-solid fa-wallet text-lg"></i>
-                <span class="text-[10px] font-bold mt-0.5">Depozit</span>
-            </button>
-            <button onclick="switchTab('withdrawTab')" class="nav-btn text-gray-400 flex flex-col items-center hover:text-goldMain">
-                <i class="fa-solid fa-money-bill-transfer text-lg"></i>
-                <span class="text-[10px] font-bold mt-0.5">Çıxarış</span>
-            </button>
-            <button onclick="switchTab('profileTab')" class="nav-btn text-gray-400 flex flex-col items-center hover:text-goldMain">
-                <i class="fa-solid fa-user text-lg"></i>
-                <span class="text-[10px] font-bold mt-0.5">Profil</span>
-            </button>
-        </div>
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-orca-surface/95 backdrop-blur-lg border-t border-orca-border px-3 py-2 z-40 flex justify-around items-center">
+        <button onclick="switchTab('tab-games')" id="nav-tab-games" class="nav-btn flex flex-col items-center text-orca-cyan transition">
+            <i class="fa-solid fa-gamepad text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Oyunlar</span>
+        </button>
+        <button onclick="switchTab('tab-deposit')" id="nav-tab-deposit" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white transition">
+            <i class="fa-solid fa-wallet text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Depozit</span>
+        </button>
+        <button onclick="switchTab('tab-withdraw')" id="nav-tab-withdraw" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white transition">
+            <i class="fa-solid fa-money-bill-transfer text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Çıxarış</span>
+        </button>
+        <button onclick="switchTab('tab-profile')" id="nav-tab-profile" class="nav-btn flex flex-col items-center text-gray-400 hover:text-white transition">
+            <i class="fa-solid fa-user text-lg"></i>
+            <span class="text-[10px] font-medium mt-0.5">Profil</span>
+        </button>
     </nav>
 
-    <!-- JAVASCRIPT LOGIC ENGINE -->
+    <!-- APPLICATION LOGIC & AVIATOR ENGINE -->
     <script>
-        /* --- STATE MANAGEMENT --- */
-        let state = {
+        // --- GLOBAL APP STATE ---
+        let appState = {
             balance: 100.00,
-            totalBets: 0.00,
-            totalWins: 0.00,
-            slotBet: 1.00,
-            aviatorBet: 2.00,
-            aviatorState: 'IDLE', // IDLE, RUNNING, CRASHED
-            aviatorMultiplier: 1.00,
-            aviatorCrashPoint: 1.00,
-            isBetPlaced: false,
-            wheelSpinning: false
+            totalBets: 0,
+            totalWin: 0.00,
+            audioEnabled: true
         };
 
-        // Synthesized Audio Generator (Beeps & Booms)
+        // Web Audio API Sound generator
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(type) {
+        function playBeep(freq = 440, type = 'sine', duration = 0.1) {
+            if (!appState.audioEnabled) return;
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-
-                if (type === 'win') {
-                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3);
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                } else if (type === 'crash') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.4);
-                }
-            } catch(e) {}
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
         }
 
-        /* --- INITIALIZATION & TELEGRAM SDK --- */
-        window.onload = function() {
+        // INIT TELEGRAM USER PROFILE
+        window.addEventListener('DOMContentLoaded', () => {
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.ready();
                 tg.expand();
-                const user = tg.initDataUnsafe?.user;
-                if (user) {
-                    const name = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Oyuncu';
-                    document.getElementById('userName').innerText = name;
-                    document.getElementById('profileName').innerText = name;
-                    document.getElementById('userId').innerText = `ID: ${user.id || '849201'}`;
-                    document.getElementById('profileId').innerText = `ID: ${user.id || '849201'}`;
-                    const letter = name.charAt(0).toUpperCase();
-                    document.getElementById('userAvatar').innerText = letter;
-                    document.getElementById('profileAvatarLetter').innerText = letter;
+
+                if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                    const u = tg.initDataUnsafe.user;
+                    const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || 'Telegram User';
+                    document.getElementById('user-name').innerText = name;
+                    document.getElementById('profile-name').innerText = name;
+                    document.getElementById('user-id').innerText = `ID: ${u.id}`;
+                    document.getElementById('profile-id').innerText = `ID: ${u.id}`;
+                    if (u.photo_url) {
+                        document.getElementById('user-avatar').src = u.photo_url;
+                        document.getElementById('profile-avatar').src = u.photo_url;
+                    }
                 }
             }
             updateBalanceUI();
             initAviatorCanvas();
-            initWheelCanvas();
-            startAviatorEngine();
-        };
+            renderLiveLeaderboard();
+        });
 
-        function showToast(msg) {
+        // UI HELPERS
+        function updateBalanceUI() {
+            document.getElementById('balance-display').innerText = appState.balance.toFixed(2);
+            document.getElementById('stat-total-bets').innerText = appState.totalBets;
+            document.getElementById('stat-total-win').innerText = `${appState.totalWin.toFixed(2)} ₼`;
+        }
+
+        function showToast(msg, isSuccess = true) {
             const toast = document.getElementById('toast');
-            toast.innerText = msg;
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').innerText = msg;
+
+            if (isSuccess) {
+                toast.style.borderColor = '#00f2fe';
+                icon.className = 'fa-solid fa-circle-check text-orca-cyan';
+            } else {
+                toast.style.borderColor = '#e52538';
+                icon.className = 'fa-solid fa-circle-xmark text-red-500';
+            }
+
             toast.classList.remove('opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'pointer-events-none');
             }, 2500);
         }
 
-        function updateBalanceUI() {
-            document.getElementById('userBalance').innerText = state.balance.toFixed(2) + ' ₼';
-            document.getElementById('statTotalBets').innerText = state.totalBets.toFixed(2) + ' ₼';
-            document.getElementById('statTotalWins').innerText = state.totalWins.toFixed(2) + ' ₼';
-        }
-
-        /* --- TAB ROUTING --- */
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-goldMain');
+                btn.classList.remove('text-orca-cyan');
                 btn.classList.add('text-gray-400');
             });
-            event.currentTarget.classList.remove('text-gray-400');
-            event.currentTarget.classList.add('text-goldMain');
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.remove('text-gray-400');
+                activeNav.classList.add('text-orca-cyan');
+            }
+
+            if (tabId === 'tab-aviator') {
+                resizeCanvas();
+            }
         }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
+        function launchAviator() {
+            switchTab('tab-aviator');
+            if (gameState === 'IDLE') {
+                startRoundCountdown();
+            }
         }
 
-        /* --- AUTHENTIC AVIATOR / CRASH ENGINE --- */
+        function toggleAudio() {
+            appState.audioEnabled = !appState.audioEnabled;
+            const btn = document.getElementById('audio-btn');
+            btn.innerHTML = appState.audioEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark text-red-500"></i>';
+        }
+
+        // DEPOSIT & WITHDRAW LOGIC
+        function setDepositValue(val) {
+            document.getElementById('deposit-amount-input').value = val;
+        }
+
+        function selectPayment(name) {
+            showToast(`${name} ödəniş üsulu seçildi`);
+        }
+
+        function executeMockDeposit() {
+            const amt = parseFloat(document.getElementById('deposit-amount-input').value);
+            if (isNaN(amt) || amt < 1) {
+                showToast('Düzgün məbləğ daxil edin', false);
+                return;
+            }
+            appState.balance += amt;
+            updateBalanceUI();
+            showToast(`${amt.toFixed(2)} ₼ balansınıza əlavə edildi!`);
+
+            // Add history item
+            const history = document.getElementById('history-list');
+            const item = document.createElement('div');
+            item.className = 'flex justify-between items-center bg-orca-card p-2 rounded border border-orca-border/50';
+            item.innerHTML = `<span class="text-emerald-400">+${amt.toFixed(2)} ₼ (Depozit)</span><span class="text-gray-500 text-[10px]">Uğurlu</span>`;
+            history.prepend(item);
+        }
+
+        function executeMockWithdraw() {
+            const amt = parseFloat(document.getElementById('withdraw-amount').value);
+            const details = document.getElementById('withdraw-details').value;
+
+            if (!details) {
+                showToast('Lütfən rekvizitləri qeyd edin', false);
+                return;
+            }
+            if (isNaN(amt) || amt <= 0 || amt > appState.balance) {
+                showToast('Kifayət qədər balans yoxdur', false);
+                return;
+            }
+
+            appState.balance -= amt;
+            updateBalanceUI();
+            showToast('Çıxarış sorğusu qəbul olundu!');
+
+            const history = document.getElementById('history-list');
+            const item = document.createElement('div');
+            item.className = 'flex justify-between items-center bg-orca-card p-2 rounded border border-orca-border/50';
+            item.innerHTML = `<span class="text-red-400">-${amt.toFixed(2)} ₼ (Çıxarış)</span><span class="text-amber-400 text-[10px]">Gözləmədə</span>`;
+            history.prepend(item);
+        }
+
+        // BET CONTROL HELPERS
+        function adjustBet(delta) {
+            const input = document.getElementById('bet-amount');
+            let val = parseFloat(input.value) || 1;
+            val = Math.max(0.5, val + delta);
+            input.value = val.toFixed(2);
+            updateBetBtnText();
+        }
+
+        function setBet(val) {
+            document.getElementById('bet-amount').value = val.toFixed(2);
+            updateBetBtnText();
+        }
+
+        function updateBetBtnText() {
+            const btn = document.getElementById('btn-action-1');
+            const val = parseFloat(document.getElementById('bet-amount').value) || 1;
+            if (playerBetState === 'NONE') {
+                btn.innerHTML = `MƏRC ET <br><span class="text-[10px] font-normal opacity-90">${val.toFixed(2)} ₼</span>`;
+            }
+        }
+
+        // --- 1:1 AUTHENTIC AVIATOR ENGINE ---
         let canvas, ctx;
-        let flightProgress = 0;
+        let gameState = 'IDLE'; // IDLE, COUNTDOWN, FLYING, FLEW_AWAY
+        let multiplier = 1.00;
+        let crashPoint = 1.00;
+        let flightProgress = 0; // 0 to 1
         let animationFrameId;
+        let countdownTimer;
+
+        // Player Bet state: NONE, BET_PLACED, CASHED_OUT
+        let playerBetState = 'NONE';
+        let currentBetAmount = 0;
 
         function initAviatorCanvas() {
             canvas = document.getElementById('aviatorCanvas');
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
             ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
         }
 
-        function startAviatorEngine() {
-            // Loop round lifecycle: 4s countdown -> Flight -> Crash -> 4s countdown
-            runAviatorRound();
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
         }
 
-        function runAviatorRound() {
-            state.aviatorState = 'IDLE';
-            state.aviatorMultiplier = 1.00;
+        function startRoundCountdown() {
+            gameState = 'COUNTDOWN';
+            multiplier = 1.00;
             flightProgress = 0;
-            
-            // Random crash multiplier logic (Weighted RTP curve)
-            const rand = Math.random();
-            if (rand < 0.05) state.aviatorCrashPoint = 1.00; // instant crash
-            else if (rand < 0.5) state.aviatorCrashPoint = parseFloat((1 + Math.random() * 1.5).toFixed(2));
-            else if (rand < 0.85) state.aviatorCrashPoint = parseFloat((2.5 + Math.random() * 4.0).toFixed(2));
-            else state.aviatorCrashPoint = parseFloat((6.0 + Math.random() * 25.0).toFixed(2));
+            let counter = 5;
 
-            document.getElementById('aviatorStatus').innerText = 'NÖVBƏTİ RAUND BAŞLAYIR...';
-            document.getElementById('aviatorMultiplier').innerText = '1.00x';
-            document.getElementById('aviatorMultiplier').className = 'font-orbitron text-4xl md:text-5xl font-black text-white drop-shadow';
+            const disp = document.getElementById('multiplier-display');
+            const sub = document.getElementById('status-subtext');
 
-            updateAviatorButtonUI();
+            disp.className = "font-mono font-black text-3xl text-orca-cyan";
+            sub.innerText = "Növbəti raund başlayır...";
 
-            // Countdown phase (3 seconds)
-            let countdown = 3;
-            let timer = setInterval(() => {
-                document.getElementById('aviatorStatus').innerText = `UÇUŞA QALDI: ${countdown}s`;
-                countdown--;
-                if (countdown < 0) {
-                    clearInterval(timer);
-                    launchFlight();
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                disp.innerText = `00:0${counter}`;
+                playBeep(600, 'sine', 0.05);
+                counter--;
+
+                if (counter < 0) {
+                    clearInterval(countdownTimer);
+                    startFlight();
                 }
             }, 1000);
         }
 
-        function launchFlight() {
-            state.aviatorState = 'RUNNING';
-            document.getElementById('aviatorStatus').innerText = 'UÇUŞ DAVA M EDİR';
-            document.getElementById('aviatorMultiplier').className = 'font-orbitron text-4xl md:text-5xl font-black text-goldMain drop-shadow-[0_0_20px_rgba(255,215,0,0.8)]';
-
-            updateAviatorButtonUI();
-            animateFlight();
-        }
-
-        function animateFlight() {
-            if (state.aviatorState !== 'RUNNING') return;
-
-            // Increment multiplier smoothly
-            state.aviatorMultiplier += 0.008 * (1 + state.aviatorMultiplier * 0.05);
-            flightProgress += 0.005;
-
-            // Auto cashout check
-            const autoVal = parseFloat(document.getElementById('autoCashoutInput').value);
-            if (state.isBetPlaced && !isNaN(autoVal) && state.aviatorMultiplier >= autoVal) {
-                cashoutAviator();
+        function startFlight() {
+            gameState = 'FLYING';
+            // Generate crash multiplier (weighted curve)
+            const rand = Math.random();
+            if (rand < 0.10) {
+                crashPoint = 1.00 + Math.random() * 0.1; // Instant crash
+            } else if (rand < 0.60) {
+                crashPoint = 1.15 + Math.random() * 1.5;
+            } else if (rand < 0.85) {
+                crashPoint = 2.5 + Math.random() * 3.5;
+            } else {
+                crashPoint = 6.0 + Math.random() * 15.0;
             }
 
-            // Crash condition check
-            if (state.aviatorMultiplier >= state.aviatorCrashPoint) {
-                triggerCrash();
-                return;
+            const disp = document.getElementById('multiplier-display');
+            const sub = document.getElementById('status-subtext');
+            disp.className = "font-mono font-black text-5xl text-white tracking-wider";
+            sub.innerText = "";
+
+            if (playerBetState === 'BET_PLACED') {
+                updateActionButton('CASHOUT');
             }
 
-            document.getElementById('aviatorMultiplier').innerText = state.aviatorMultiplier.toFixed(2) + 'x';
+            let startTime = performance.now();
 
-            // Draw flight curve canvas
-            drawAviatorCanvas();
+            function animate(time) {
+                let elapsed = (time - startTime) / 1000;
+                // Exponential multiplier increase formula
+                multiplier = Math.pow(Math.E, 0.08 * elapsed);
 
-            animationFrameId = requestAnimationFrame(animateFlight);
+                if (multiplier >= crashPoint) {
+                    multiplier = crashPoint;
+                    triggerCrash();
+                    return;
+                }
+
+                // Auto Cashout Check
+                const autoCheck = document.getElementById('auto-cashout-check').checked;
+                const autoVal = parseFloat(document.getElementById('auto-cashout-val').value) || 2.0;
+                if (playerBetState === 'BET_PLACED' && autoCheck && multiplier >= autoVal) {
+                    cashoutPlayer();
+                }
+
+                // Update UI text & Live payout if bet placed
+                disp.innerText = `${multiplier.toFixed(2)}x`;
+                if (playerBetState === 'BET_PLACED') {
+                    const winVal = (currentBetAmount * multiplier).toFixed(2);
+                    document.getElementById('btn-action-1').innerHTML = `PULUNU ÇƏK<br><span class="text-xs font-mono">${winVal} ₼</span>`;
+                }
+
+                // Draw flight curve
+                flightProgress = Math.min(1, elapsed / 10);
+                drawFlightCanvas(flightProgress);
+
+                // Live simulated players updating
+                updateSimulatedLeaderboard(multiplier);
+
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            animationFrameId = requestAnimationFrame(animate);
         }
 
-        function drawAviatorCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        function drawFlightCanvas(progress) {
+            if (!ctx) return;
             const w = canvas.width;
             const h = canvas.height;
 
-            // Draw background grid lines
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-            ctx.lineWidth = 1;
-            for (let x = 0; x < w; x += 40) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-            }
-            for (let y = 0; y < h; y += 40) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-            }
+            ctx.clearRect(0, 0, w, h);
 
-            if (state.aviatorState === 'RUNNING' || state.aviatorState === 'CRASHED') {
-                const endX = Math.min(w * 0.85, (flightProgress * w * 0.8) + 20);
-                const endY = Math.max(h * 0.2, h - (flightProgress * h * 0.7) - 20);
+            if (gameState !== 'FLYING' && gameState !== 'FLEW_AWAY') return;
 
-                // Flight Curved Area Fill
+            // Define curve points
+            const startX = 30;
+            const startY = h - 30;
+            const endX = startX + (w - 80) * Math.min(progress * 1.2, 1);
+            const endY = startY - (h - 80) * Math.min(progress * 1.2, 1);
+
+            const controlX = startX + (endX - startX) * 0.4;
+            const controlY = startY;
+
+            // Fill gradient under curve
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+            ctx.lineTo(endX, startY);
+            ctx.closePath();
+
+            const fillGrad = ctx.createLinearGradient(0, 0, 0, h);
+            fillGrad.addColorStop(0, 'rgba(229, 37, 56, 0.35)');
+            fillGrad.addColorStop(1, 'rgba(229, 37, 56, 0.0)');
+            ctx.fillStyle = fillGrad;
+            ctx.fill();
+
+            // Draw Curved Line
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+            ctx.strokeStyle = '#e52538';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Draw Flying Red Airplane Icon / SVG Shape
+            if (gameState === 'FLYING') {
+                ctx.save();
+                ctx.translate(endX, endY);
+                ctx.rotate(-Math.PI / 12);
+
+                // Simple Stylized Airplane Shape
+                ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
-                ctx.moveTo(0, h);
-                ctx.quadraticCurveTo(endX * 0.5, h, endX, endY);
-                ctx.lineTo(endX, h);
-                ctx.closePath();
-                const grad = ctx.createLinearGradient(0, 0, 0, h);
-                grad.addColorStop(0, 'rgba(229, 28, 68, 0.4)');
-                grad.addColorStop(1, 'rgba(229, 28, 68, 0.0)');
-                ctx.fillStyle = grad;
+                ctx.arc(0, 0, 8, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Curve Line
+                ctx.fillStyle = '#e52538';
                 ctx.beginPath();
-                ctx.moveTo(0, h);
-                ctx.quadraticCurveTo(endX * 0.5, h, endX, endY);
-                ctx.strokeStyle = '#e51c44';
-                ctx.lineWidth = 4;
-                ctx.stroke();
+                ctx.moveTo(12, 0);
+                ctx.lineTo(-10, -8);
+                ctx.lineTo(-4, 0);
+                ctx.lineTo(-10, 8);
+                ctx.closePath();
+                ctx.fill();
 
-                // Rocket / Plane Graphic Icon
-                if (state.aviatorState === 'RUNNING') {
-                    ctx.fillStyle = '#ffd700';
-                    ctx.beginPath();
-                    ctx.arc(endX, endY, 8, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Rocket Jet Exhaust Particles
-                    ctx.fillStyle = '#ff0055';
-                    ctx.beginPath();
-                    ctx.arc(endX - 10, endY + 4, 4, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                ctx.restore();
             }
         }
 
         function triggerCrash() {
-            state.aviatorState = 'CRASHED';
-            playSound('crash');
+            cancelAnimationFrame(animationFrameId);
+            gameState = 'FLEW_AWAY';
 
-            document.getElementById('aviatorStatus').innerText = 'FLOWN AWAY! (UÇDU GOETDİ)';
-            document.getElementById('aviatorMultiplier').innerText = state.aviatorCrashPoint.toFixed(2) + 'x';
-            document.getElementById('aviatorMultiplier').className = 'font-orbitron text-4xl md:text-5xl font-black text-red-500 drop-shadow-[0_0_20px_rgba(255,0,0,0.8)]';
+            const disp = document.getElementById('multiplier-display');
+            const sub = document.getElementById('status-subtext');
 
-            // Prepend history bar
-            const historyBar = document.getElementById('multiplierHistory');
-            const newSpan = document.createElement('span');
-            const val = state.aviatorCrashPoint;
-            let colorClass = val >= 10 ? 'bg-pink-900/60 text-pink-300 border-pink-500/30' : (val >= 2 ? 'bg-purple-900/60 text-purple-300 border-purple-500/30' : 'bg-blue-900/60 text-blue-300 border-blue-500/30');
-            newSpan.className = `px-2 py-0.5 rounded ${colorClass} border font-bold`;
-            newSpan.innerText = val.toFixed(2) + 'x';
-            historyBar.insertBefore(newSpan, historyBar.firstChild);
+            disp.className = "font-mono font-black text-4xl text-red-500 tracking-wider";
+            disp.innerText = "UÇDU!";
+            sub.innerText = `${multiplier.toFixed(2)}x əmsalda təyyarə uçdu`;
 
-            if (state.isBetPlaced) {
-                showToast('Mərc uduzuldu!');
-                state.isBetPlaced = false;
+            playBeep(200, 'sawtooth', 0.3);
+
+            // Handle lost bet
+            if (playerBetState === 'BET_PLACED') {
+                playerBetState = 'NONE';
+                showToast('Mərc uduzuldu', false);
             }
 
-            updateAviatorButtonUI();
+            updateActionButton('BET');
+            addHistoryPill(multiplier);
 
-            // Schedule next round
+            // Reset after short delay
             setTimeout(() => {
-                runAviatorRound();
-            }, 3500);
+                startRoundCountdown();
+            }, 3000);
         }
 
-        function setAviatorBet(amt) {
-            document.getElementById('aviatorBetAmount').value = amt.toFixed(2);
-        }
+        function handleBetAction() {
+            const betAmt = parseFloat(document.getElementById('bet-amount').value) || 1;
 
-        function handleAviatorAction() {
-            if (state.aviatorState === 'RUNNING' && state.isBetPlaced) {
-                // CASH OUT ACTION
-                cashoutAviator();
-            } else {
-                // PLACE BET ACTION
-                const betAmt = parseFloat(document.getElementById('aviatorBetAmount').value);
-                if (isNaN(betAmt) || betAmt <= 0) {
-                    showToast('Düzgün məbləğ daxil edin!');
+            if (playerBetState === 'NONE') {
+                // Place Bet
+                if (appState.balance < betAmt) {
+                    showToast('Kifayət qədər balans yoxdur', false);
                     return;
                 }
-                if (betAmt > state.balance) {
-                    showToast('Kafi balans yoxdur!');
-                    return;
-                }
-
-                state.balance -= betAmt;
-                state.totalBets += betAmt;
-                state.aviatorBet = betAmt;
-                state.isBetPlaced = true;
+                appState.balance -= betAmt;
+                appState.totalBets++;
+                currentBetAmount = betAmt;
+                playerBetState = 'BET_PLACED';
                 updateBalanceUI();
 
-                showToast('Mərc qəbul olundu!');
-                updateAviatorButtonUI();
+                playBeep(800, 'sine', 0.1);
+
+                if (gameState === 'FLYING') {
+                    updateActionButton('CASHOUT');
+                } else {
+                    updateActionButton('WAITING');
+                    showToast('Mərc növbəti raund üçün qəbul edildi');
+                }
+            } else if (playerBetState === 'BET_PLACED' && gameState === 'FLYING') {
+                // Cashout
+                cashoutPlayer();
             }
         }
 
-        function cashoutAviator() {
-            if (!state.isBetPlaced || state.aviatorState !== 'RUNNING') return;
+        function cashoutPlayer() {
+            if (playerBetState !== 'BET_PLACED') return;
 
-            const winAmt = state.aviatorBet * state.aviatorMultiplier;
-            state.balance += winAmt;
-            state.totalWins += winAmt;
-            state.isBetPlaced = false;
-
-            playSound('win');
-            showToast(`QAZANDINIZ: +${winAmt.toFixed(2)} AZN!`);
-            updateBalanceUI();
-            updateAviatorButtonUI();
-        }
-
-        function updateAviatorButtonUI() {
-            const btn = document.getElementById('aviatorBtn');
-            if (state.aviatorState === 'RUNNING' && state.isBetPlaced) {
-                btn.innerText = `PULU ÇIXAR (${(state.aviatorBet * state.aviatorMultiplier).toFixed(2)} AZN)`;
-                btn.className = 'flex-1 py-2.5 rounded-lg font-orbitron font-black text-sm uppercase tracking-wider green-btn-glow text-white transition-all';
-            } else if (state.isBetPlaced) {
-                btn.innerText = 'MƏRC QƏBUL OLUNDU';
-                btn.className = 'flex-1 py-2.5 rounded-lg font-orbitron font-black text-sm uppercase tracking-wider bg-gray-600 text-gray-300 opacity-70 cursor-not-allowed';
-            } else {
-                btn.innerText = 'MƏRC ET';
-                btn.className = 'flex-1 py-2.5 rounded-lg font-orbitron font-black text-sm uppercase tracking-wider red-btn-glow text-white transition-all';
-            }
-        }
-
-        /* --- AUTHENTIC 3x3 SLOT MACHINE --- */
-        const slotSymbols = ['7️⃣', '💎', '👑', '🔥', '🍋', '🔔'];
-        function adjustSlotBet(delta) {
-            state.slotBet = Math.max(0.5, state.slotBet + delta);
-            document.getElementById('slotBetText').innerText = state.slotBet.toFixed(2) + ' ₼';
-        }
-
-        function spinSlotMachine() {
-            if (state.balance < state.slotBet) {
-                showToast('Balansınız yetərli deyil!');
-                return;
-            }
-
-            state.balance -= state.slotBet;
-            state.totalBets += state.slotBet;
+            const winAmount = currentBetAmount * multiplier;
+            appState.balance += winAmount;
+            appState.totalWin += winAmount;
+            playerBetState = 'CASHED_OUT';
             updateBalanceUI();
 
-            const r1 = document.getElementById('reel1');
-            const r2 = document.getElementById('reel2');
-            const r3 = document.getElementById('reel3');
+            playBeep(1200, 'triangle', 0.2);
+            showToast(`UĞURLU! +${winAmount.toFixed(2)} ₼ qazandınız!`);
+            updateActionButton('WAITING_NEXT');
+        }
 
-            const spinBtn = document.getElementById('spinSlotBtn');
-            spinBtn.disabled = true;
+        function updateActionButton(type) {
+            const btn = document.getElementById('btn-action-1');
+            const betVal = parseFloat(document.getElementById('bet-amount').value) || 1;
 
-            // Spinning animation simulation
-            let spins = 0;
-            const interval = setInterval(() => {
-                r1.innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                r2.innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                r3.innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                spins++;
+            if (type === 'BET') {
+                btn.className = "w-full py-3 rounded-xl font-bold font-mono text-white text-sm shadow-lg uppercase bg-orca-aviatorGreen hover:brightness-110 active:scale-98 transition";
+                btn.innerHTML = `MƏRC ET <br><span class="text-[10px] font-normal opacity-90">${betVal.toFixed(2)} ₼</span>`;
+            } else if (type === 'CASHOUT') {
+                btn.className = "w-full py-3 rounded-xl font-bold font-mono text-orca-bg text-sm shadow-lg uppercase bg-amber-400 hover:bg-amber-300 animate-pulse-glow transition";
+                btn.innerHTML = `PULUNU ÇƏK<br><span class="text-xs font-mono">${(currentBetAmount * multiplier).toFixed(2)} ₼</span>`;
+            } else if (type === 'WAITING') {
+                btn.className = "w-full py-3 rounded-xl font-bold font-mono text-white text-xs shadow-lg uppercase bg-red-600 opacity-80 cursor-not-allowed";
+                btn.innerText = "LƏĞV ET / GÖZLƏNİLİR";
+            } else if (type === 'WAITING_NEXT') {
+                btn.className = "w-full py-3 rounded-xl font-bold font-mono text-white text-xs shadow-lg uppercase bg-zinc-700 cursor-not-allowed";
+                btn.innerText = "RAUND GÖZLƏNİLİR";
+            }
+        }
 
-                if (spins > 12) {
-                    clearInterval(interval);
-                    spinBtn.disabled = false;
+        function addHistoryPill(mult) {
+            const bar = document.getElementById('history-bar');
+            const pill = document.createElement('span');
+            
+            let colorClass = "bg-blue-900/60 text-blue-300 border-blue-500/30";
+            if (mult >= 2.0 && mult < 10.0) {
+                colorClass = "bg-purple-900/60 text-purple-300 border-purple-500/30";
+            } else if (mult >= 10.0) {
+                colorClass = "bg-pink-900/60 text-pink-300 border-pink-500/30";
+            }
 
-                    // Final symbols determination
-                    const s1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    const s2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    const s3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            pill.className = `${colorClass} border px-2 py-0.5 rounded-full text-[11px] font-mono`;
+            pill.innerText = `${mult.toFixed(2)}x`;
 
-                    r1.innerText = s1;
-                    r2.innerText = s2;
-                    r3.innerText = s3;
+            bar.prepend(pill);
+            if (bar.children.length > 15) {
+                bar.removeChild(bar.lastChild);
+            }
+        }
 
-                    // Win check
-                    if (s1 === s2 && s2 === s3) {
-                        const win = state.slotBet * (s1 === '7️⃣' ? 10 : 5);
-                        state.balance += win;
-                        state.totalWins += win;
-                        playSound('win');
-                        showToast(`JACKPOT! +${win.toFixed(2)} AZN!`);
-                    } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-                        const win = state.slotBet * 1.5;
-                        state.balance += win;
-                        state.totalWins += win;
-                        playSound('win');
-                        showToast(`QAZANÇ! +${win.toFixed(2)} AZN`);
+        // SIMULATED LIVE LEADERBOARD
+        const mockNames = ['Elvin_99', 'Rashad_AZ', 'Leyla_M', 'User_8841', 'CryptoKing', 'Bakı_012', 'Anar_V', 'Samir_88', 'Nigar_A'];
+        
+        function renderLiveLeaderboard() {
+            const table = document.getElementById('bets-table');
+            table.innerHTML = '';
+            mockNames.slice(0, 6).forEach(name => {
+                const bet = (Math.random() * 20 + 2).toFixed(2);
+                const row = document.createElement('div');
+                row.className = "flex justify-between items-center bg-zinc-900/60 p-1.5 rounded border border-zinc-800/50";
+                row.id = `player-row-${name}`;
+                row.innerHTML = `
+                    <span class="text-gray-300 truncate max-w-[90px]">${name}</span>
+                    <span class="text-gray-400">${bet} ₼</span>
+                    <span class="mult-cell text-gray-500">-</span>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function updateSimulatedLeaderboard(currentMult) {
+            mockNames.slice(0, 6).forEach(name => {
+                const row = document.getElementById(`player-row-${name}`);
+                if (row) {
+                    const multCell = row.querySelector('.mult-cell');
+                    // Random cashout logic for simulated players
+                    if (multCell.innerText === '-' && Math.random() < 0.03 && currentMult > 1.2) {
+                        multCell.innerText = `${currentMult.toFixed(2)}x`;
+                        multCell.className = "mult-cell text-emerald-400 font-bold";
                     }
-                    updateBalanceUI();
                 }
-            }, 100);
-        }
-
-        /* --- WHEEL OF FORTUNE (ÇƏRXİFƏLƏK) --- */
-        const wheelSectors = [
-            { label: '5 AZN', value: 5 },
-            { label: '0 AZN', value: 0 },
-            { label: '10 AZN', value: 10 },
-            { label: '2 AZN', value: 2 },
-            { label: '50 AZN', value: 50 },
-            { label: '0 AZN', value: 0 }
-        ];
-
-        function initWheelCanvas() {
-            const wCanvas = document.getElementById('wheelCanvas');
-            const wCtx = wCanvas.getContext('2d');
-            const numSectors = wheelSectors.length;
-            const arc = (Math.PI * 2) / numSectors;
-
-            for (let i = 0; i < numSectors; i++) {
-                const angle = i * arc;
-                wCtx.beginPath();
-                wCtx.fillStyle = i % 2 === 0 ? '#ffd700' : '#150d21';
-                wCtx.moveTo(125, 125);
-                wCtx.arc(125, 125, 120, angle, angle + arc);
-                wCtx.lineTo(125, 125);
-                wCtx.fill();
-                wCtx.strokeStyle = '#ffaa00';
-                wCtx.stroke();
-
-                // Draw Text
-                wCtx.save();
-                wCtx.translate(125 + Math.cos(angle + arc / 2) * 80, 125 + Math.sin(angle + arc / 2) * 80);
-                wCtx.rotate(angle + arc / 2 + Math.PI / 2);
-                wCtx.fillStyle = i % 2 === 0 ? '#000' : '#fff';
-                wCtx.font = 'bold 12px Orbitron';
-                wCtx.fillText(wheelSectors[i].label, -15, 0);
-                wCtx.restore();
-            }
-        }
-
-        function spinWheel() {
-            if (state.wheelSpinning) return;
-            state.wheelSpinning = true;
-
-            const wheelCanvas = document.getElementById('wheelCanvas');
-            const randomRotation = 1440 + Math.floor(Math.random() * 360);
-            wheelCanvas.style.transform = `rotate(${randomRotation}deg)`;
-
-            setTimeout(() => {
-                state.wheelSpinning = false;
-                const wonAmt = 10; // Fixed demo prize for satisfaction
-                state.balance += wonAmt;
-                state.totalWins += wonAmt;
-                updateBalanceUI();
-                playSound('win');
-                showToast(`HƏDİYYƏ QAZANDINIZ: +${wonAmt} AZN!`);
-                closeModal('wheelModal');
-            }, 4000);
-        }
-
-        /* --- DEPOSIT & WITHDRAWAL LOGIC --- */
-        function selectPaymentMethod(method) {
-            document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('border-goldMain', 'active-pay'));
-            event.currentTarget.classList.add('border-goldMain', 'active-pay');
-        }
-
-        function setDepositAmount(amt) {
-            document.getElementById('depositInput').value = amt;
-        }
-
-        function executeDeposit() {
-            const amt = parseFloat(document.getElementById('depositInput').value);
-            if (isNaN(amt) || amt < 5) {
-                showToast('Minimum depozit 5 AZN-dir!');
-                return;
-            }
-
-            state.balance += amt;
-            updateBalanceUI();
-
-            // Add log
-            const history = document.getElementById('txHistory');
-            const log = document.createElement('div');
-            log.className = 'flex justify-between items-center bg-black/40 p-2 rounded border border-white/5';
-            log.innerHTML = `<span class="text-green-400">+${amt.toFixed(2)} AZN (Depozit)</span><span class="text-gray-500 text-[10px]">Uğurlu</span>`;
-            history.insertBefore(log, history.firstChild);
-
-            showToast(`Balans +${amt.toFixed(2)} AZN artırıldı!`);
-            document.getElementById('depositInput').value = '';
-        }
-
-        function executeWithdrawal() {
-            const acc = document.getElementById('withdrawAccount').value.trim();
-            const amt = parseFloat(document.getElementById('withdrawAmount').value);
-
-            if (!acc || acc.length < 8) {
-                showToast('Düzgün kart/hesab nömrəsi daxil edin!');
-                return;
-            }
-            if (isNaN(amt) || amt < 10) {
-                showToast('Minimum çıxarış 10 AZN-dir!');
-                return;
-            }
-            if (amt > state.balance) {
-                showToast('Balansda kifayət qədər vəsait yoxdur!');
-                return;
-            }
-
-            state.balance -= amt;
-            updateBalanceUI();
-
-            const history = document.getElementById('txHistory');
-            const log = document.createElement('div');
-            log.className = 'flex justify-between items-center bg-black/40 p-2 rounded border border-white/5';
-            log.innerHTML = `<span class="text-red-400">-${amt.toFixed(2)} AZN (Çıxarış)</span><span class="text-amber-400 text-[10px]">İşlənilir</span>`;
-            history.insertBefore(log, history.firstChild);
-
-            showToast('Çıxarış sorğusu qəbul olundu!');
-            document.getElementById('withdrawAmount').value = '';
+            });
         }
     </script>
 </body>
